@@ -7,14 +7,14 @@ class m120817_115745_catalogue extends CDbMigration
            $this->createTable('{{category}}', array(
                 'id' => 'pk',
                 'parent_id' => 'int',
-                'sorting' => 'int',
-                'title' => 'varchar (255) NOT NULL',
+                'sorting' => 'tinyint(3)',
+                'title' => 'varchar (200) NOT NULL',
             ));
 
             $this->createTable('{{product}}', array(
                 'id' => 'pk',
-                'title' => 'varchar (255) NOT NULL',
-                'short_description' => 'text NOT NULL',
+                'title' => 'varchar (200) NOT NULL',
+                'short_description' => 'tinytext NOT NULL',
             ));
             
             $this->createTable('{{product_description}}', array(
