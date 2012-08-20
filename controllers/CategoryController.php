@@ -122,7 +122,7 @@ class CategoryController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Category');
+        $dataProvider=new CActiveDataProvider($this->getCatalogueModule()->categoryModelClass);
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -155,6 +155,17 @@ class CategoryController extends Controller
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
+
+    /**
+     * @return StaticPagesModule
+     */
+    private function getCatalogueModule() {
+        return Yii::app()->getModule("catalogue");
+    }
+
+    private function getModelClass() {
+        return $this->getStaticPagesModule()->modelClass;
+    }
 
 	/**
 	 * Performs the AJAX validation.
