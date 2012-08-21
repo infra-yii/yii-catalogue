@@ -28,7 +28,7 @@ class CategoryController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view', 'tree', 'list'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -62,14 +62,15 @@ class CategoryController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Category;
+        $c = $this->getModelClass();
+        $model=new $c;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Category']))
+		if(isset($_POST[$this->getModelClass()]))
 		{
-			$model->attributes=$_POST['Category'];
+			$model->attributes=$_POST[$this->getModelClass()];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -118,15 +119,47 @@ class CategoryController extends Controller
 	}
 
 	/**
-	 * Lists all models.
+	 * Lists all Root models.
 	 */
 	public function actionIndex()
 	{
-        $dataProvider=new CActiveDataProvider($this->getCatalogueModule()->categoryModelClass);
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+        $dataProvider=new CActiveDataProvider($this->getCatalogueModule()->categoryModelClass,  array(
+            'criteria'=>array(
+                'condition'=>'parent_id=0',
+                'order'=>'sorting DESC',
+                'with'=>array('picHolder'),
+            ),
+            'pagination'=>array(
+                'pageSize'=>20,
+            ),
+        ));
+
+        $this->render('index',array(
+            'dataProvider'=>$dataProvider,
+        ));
 	}
+
+    /**
+     * Lists all category by parent id
+     * @param $id
+     */
+    public function actionList($id)
+    {
+        $dataProvider=new CActiveDataProvider($this->getCatalogueModule()->categoryModelClass,  array(
+            'criteria'=>array(
+                'condition'=>'parent_id='.$id,
+                'order'=>'sorting DESC',
+                'with'=>array('picHolder'),
+            ),
+            'pagination'=>array(
+                'pageSize'=>20,
+            ),
+        ));
+        $this->render('list',array(
+            'dataProvider'=>$dataProvider,
+        ));
+    }
+
 
 	/**
 	 * Manages all models.
@@ -142,6 +175,18 @@ class CategoryController extends Controller
 			'model'=>$model,
 		));
 	}
+
+    /**
+     * Build category tree
+     */
+    public function actionTree()
+    {
+        $model=new Category();
+
+        $this->render('tree',array(
+            'tree'=>$model->getTree(),
+        ));
+    }
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
@@ -164,7 +209,7 @@ class CategoryController extends Controller
     }
 
     private function getModelClass() {
-        return $this->getStaticPagesModule()->modelClass;
+        return $this->getCatalogueModule()->categoryModelClass;
     }
 
 	/**

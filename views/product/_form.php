@@ -2,6 +2,7 @@
 /* @var $this ProductController */
 /* @var $model Product */
 /* @var $form CActiveForm */
+
 ?>
 
 <div class="form">
@@ -27,7 +28,7 @@
 		<?php echo $form->error($model,'short_description'); ?>
 	</div>
 
-	<div class="row buttons">
+    <div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 	</div>
 
