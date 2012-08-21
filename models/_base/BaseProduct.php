@@ -14,66 +14,66 @@
  * @property string $short_description
  *
  * @property mixed $tblCategories
- * @property ProductDescription[] $productDescriptions
+ * @property ProductInfo[] $productInfos
  */
 abstract class BaseProduct extends GxActiveRecord {
 
-	public static function model($className=__CLASS__) {
-		return parent::model($className);
-	}
+    public static function model($className=__CLASS__) {
+        return parent::model($className);
+    }
 
-	public function tableName() {
-		return '{{product}}';
-	}
+    public function tableName() {
+        return '{{product}}';
+    }
 
-	public static function label($n = 1) {
-		return Yii::t('app', 'Product|Products', $n);
-	}
+    public static function label($n = 1) {
+        return Yii::t('app', 'Product|Products', $n);
+    }
 
-	public static function representingColumn() {
-		return 'title';
-	}
+    public static function representingColumn() {
+        return 'title';
+    }
 
-	public function rules() {
-		return array(
-			array('title, short_description', 'required'),
-			array('title', 'length', 'max'=>200),
-			array('id, title, short_description', 'safe', 'on'=>'search'),
-		);
-	}
+    public function rules() {
+        return array(
+            array('title, short_description', 'required'),
+            array('title', 'length', 'max'=>200),
+            array('id, title, short_description', 'safe', 'on'=>'search'),
+        );
+    }
 
-	public function relations() {
-		return array(
-			'tblCategories' => array(self::MANY_MANY, 'Category', '{{category_to_product}}(product_id, category_id)'),
-			'productDescriptions' => array(self::HAS_MANY, 'ProductDescription', 'product_id'),
-		);
-	}
+    public function relations() {
+        return array(
+            'tblCategories' => array(self::MANY_MANY, 'Category', '{{category_to_product}}(product_id, category_id)'),
+            'productInfos' => array(self::HAS_ONE, 'ProductInfo', 'product_id'),
+        );
+    }
 
-	public function pivotModels() {
-		return array(
-			'tblCategories' => 'CategoryToProduct',
-		);
-	}
+    public function pivotModels() {
+        return array(
+            'tblCategories' => 'CategoryToProduct',
+        );
+    }
 
-	public function attributeLabels() {
-		return array(
-			'id' => Yii::t('app', 'ID'),
-			'title' => Yii::t('app', 'Title'),
-			'short_description' => Yii::t('app', 'Short Description'),
-			'tblCategories' => null,
-			'productDescriptions' => null,
-		);
-	}
+    public function attributeLabels() {
+        return array(
+            'id' => Yii::t('app', 'ID'),
+            'title' => Yii::t('app', 'Title'),
+            'short_description' => Yii::t('app', 'Short Description'),
+            'tblCategories' => null,
+            'productInfos' => null,
+        );
+    }
 
-	public function search() {
-		$criteria = new CDbCriteria;
+    public function search() {
+        $criteria = new CDbCriteria;
 
-		$criteria->compare('id', $this->id);
-		$criteria->compare('title', $this->title, true);
-		$criteria->compare('short_description', $this->short_description, true);
+        $criteria->compare('id', $this->id);
+        $criteria->compare('title', $this->title, true);
+        $criteria->compare('short_description', $this->short_description, true);
 
-		return new CActiveDataProvider($this, array(
-			'criteria' => $criteria,
-		));
-	}
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+        ));
+    }
 }

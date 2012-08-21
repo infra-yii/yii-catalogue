@@ -2,6 +2,7 @@
 /* @var $this ProductController */
 /* @var $model Product */
 /* @var $form CActiveForm */
+
 ?>
 
 <div class="form">
@@ -36,11 +37,10 @@
 	</div>
 
 
-
     <?$this->renderPartial('_info', array("model" => $model))?>
 
 
-	<div class="row buttons">
+    <div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 	</div>
 

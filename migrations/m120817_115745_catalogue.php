@@ -20,7 +20,7 @@ class m120817_115745_catalogue extends CDbMigration
             $this->createTable('{{product_info}}', array(
                 'id' => 'pk',
                 'product_id' => 'int',
-                'description' => 'text NOT NULL',
+                'description' => 'text DEFAULT NULL',
                 'UNIQUE KEY `product_id` (`product_id`)',
             ));
             

@@ -9,10 +9,11 @@ $this->breadcrumbs=array(
 $this->menu=array(
 	array('label'=>'Create Category', 'url'=>array('create')),
 	array('label'=>'Manage Category', 'url'=>array('admin')),
+	array('label'=>'Category Tree', 'url'=>array('tree')),
 );
 ?>
 
-<h1>Categories</h1>
+<h1>Categories Root</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
