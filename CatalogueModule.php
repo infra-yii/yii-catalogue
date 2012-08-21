@@ -1,7 +1,7 @@
 <?php
 class CatalogueModule extends CWebModule{
 
-    public $categoryModelClass = "Category";
+    public $categoryModelClass = "CatalogueCategory";
 
     /**
      * Returns model class object

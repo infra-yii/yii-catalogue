@@ -2,7 +2,7 @@
 
 Yii::import('catalogue.models._base.BaseCategory');
 
-class Category extends BaseCategory
+class CatalogueCategory extends BaseCategory
 {
     /**
      * @static
