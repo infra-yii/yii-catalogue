@@ -17,10 +17,11 @@ class m120817_115745_catalogue extends CDbMigration
                 'short_description' => 'tinytext NOT NULL',
             ));
             
-            $this->createTable('{{product_description}}', array(
+            $this->createTable('{{product_info}}', array(
                 'id' => 'pk',
                 'product_id' => 'int',
                 'description' => 'text NOT NULL',
+                'UNIQUE KEY `product_id` (`product_id`)',
             ));
             
             $this->createTable('{{category_to_product}}', array(
@@ -29,11 +30,11 @@ class m120817_115745_catalogue extends CDbMigration
                 'PRIMARY KEY (`product_id`, `category_id`)',
             ));
                         
-            $this->addForeignKey("parent_category", "{{category}}", "parent_id", "{{category}}", "id");
-            $this->addForeignKey("product_description", "{{product_description}}", "product_id", "{{product}}", "id");
+            $this->addForeignKey("parent_category", "{{category}}", "parent_id", "{{category}}", "id",null,"CASCADE");
+            $this->addForeignKey("product_description", "{{product_info}}", "product_id", "{{product}}", "id", "CASCADE", "CASCADE");
             
-            $this->addForeignKey("product_product", "{{category_to_product}}", "product_id", "{{product}}", "id");
-            $this->addForeignKey("category_category", "{{category_to_product}}", "category_id", "{{category}}", "id");
+            $this->addForeignKey("product_product", "{{category_to_product}}", "product_id", "{{product}}", "id", "CASCADE", "CASCADE");
+            $this->addForeignKey("category_category", "{{category_to_product}}", "category_id", "{{category}}", "id", "CASCADE", "CASCADE");
 	}
 
 	public function down()
