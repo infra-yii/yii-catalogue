@@ -3,6 +3,8 @@ class CatalogueModule extends CWebModule{
 
     public $categoryModelClass = "Category";
 
+    public $infoformView = "_infoform";
+
     /**
      * Returns model class object
      * @return StaticPage

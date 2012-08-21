@@ -80,6 +80,7 @@ class ProductController extends Controller
 
 		$this->render('create',array(
 			'model'=>$model,
+            'infoform'=> $this->getCatalogueModule()->infoformView,
 		));
 	}
 
@@ -112,6 +113,7 @@ class ProductController extends Controller
 
 		$this->render('update',array(
 			'model'=>$model,
+            'infoform'=> $this->getCatalogueModule()->infoformView,
 		));
 	}
 
@@ -154,6 +156,13 @@ class ProductController extends Controller
 			'model'=>$model,
 		));
 	}
+
+    /**
+     * @return CatalogueModule
+     */
+    private function getCatalogueModule() {
+        return Yii::app()->getModule("catalogue");
+    }
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.

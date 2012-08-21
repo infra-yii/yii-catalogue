@@ -37,7 +37,7 @@
 	</div>
 
 
-    <?$this->renderPartial('_info', array("model" => $model))?>
+    <?$this->renderPartial($infoform, array("model" => $model))?>
 
 
     <div class="row buttons">
