@@ -15,6 +15,35 @@ class CatalogueCategory extends BaseCategory
         return parent::model($className);
     }
 
+    public function relations()
+    {
+        return array(
+            'products' => array(self::MANY_MANY, 'Product', '{{category_to_product}}(product_id, category_id)', 'together' => true),
+            'info' => array(self::HAS_ONE, 'CategoryInfo', 'category_id'),
+        );
+    }
+
+    public function beforeSave()
+    {
+        parent::beforeSave();
+
+        if(Yii::app()->getComponent("i18n2ascii")) {
+            Yii::app()->getComponent("i18n2ascii")->setModelUrlAlias($this, $this->title);
+        }
+        return true;
+    }
+
+    /**
+     * @param bool $normalize
+     * @return array|string
+     */
+    public function url($normalize = true)
+    {
+        $u = array(Yii::app()->getModule("catalogue")->actionView, "id" => $this->path ? $this->path : $this->id);
+
+        return $normalize ? CHtml::normalizeUrl($u) : $u;
+    }
+
     /**
      * @return mixed
      */
@@ -24,7 +53,6 @@ class CatalogueCategory extends BaseCategory
 
         return $this->_buildTree($categoryTree);
     }
-
 
     /**
      * @param $categories

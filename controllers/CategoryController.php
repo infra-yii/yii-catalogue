@@ -70,13 +70,21 @@ class CategoryController extends Controller
 
 		if(isset($_POST[$this->getModelClass()]))
 		{
+            $model->info = new CategoryInfo();
+            $model->info->attributes = $_POST[$this->getModelClass()]['info'];
+
 			$model->attributes=$_POST[$this->getModelClass()];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+                $model->info->category_id = $model->id;
+                $model->info->save();
+
+                $this->redirect(array('view','id'=>$model->id));
+            }
 		}
 
 		$this->render('create',array(
 			'model'=>$model,
+            'infoform'=> $this->getCatalogueModule()->infoformView,
 		));
 	}
 
@@ -87,20 +95,28 @@ class CategoryController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
+		$model=$this->loadModel($id)->with('info');
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Category']))
+		if(isset($_POST[$this->getModelClass()]))
 		{
-			$model->attributes=$_POST['Category'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+            $model->info = new CategoryInfo();
+            $model->info->attributes = $_POST[$this->getModelClass()]['info'];
+
+            $model->attributes=$_POST[$this->getModelClass()];
+            if($model->save()){
+                $model->info->category_id = $model->id;
+                $model->info->save();
+
+                $this->redirect(array('view','id'=>$model->id));
+            }
 		}
 
 		$this->render('update',array(
 			'model'=>$model,
+            'infoform'=> $this->getCatalogueModule()->infoformView,
 		));
 	}
 
@@ -119,7 +135,7 @@ class CategoryController extends Controller
 	}
 
 	/**
-	 * Lists all Root models.
+	 * Lists Root category.
 	 */
 	public function actionIndex()
 	{
@@ -141,11 +157,11 @@ class CategoryController extends Controller
 
     /**
      * Lists all category by parent id
-     * @param $id
+     * @param integer $id the ID of the parent id
      */
     public function actionList($id)
     {
-        $dataProvider=new CActiveDataProvider($this->getCatalogueModule()->categoryModelClass,  array(
+        $categoryProvider=new CActiveDataProvider($this->getCatalogueModule()->categoryModelClass,  array(
             'criteria'=>array(
                 'condition'=>'parent_id='.$id,
                 'order'=>'sorting DESC',
@@ -155,8 +171,21 @@ class CategoryController extends Controller
                 'pageSize'=>20,
             ),
         ));
+
+        $productProvider=new CActiveDataProvider($this->getCatalogueModule()->productModelClass,  array(
+            'criteria'=>array(
+                //'with'=>array('categories'),
+                'join' => 'JOIN {{category_to_product}} on t.id={{category_to_product}}.product_id',
+                'condition'=>'category_id='.$id,
+            ),
+            'pagination'=>array(
+                'pageSize'=>20,
+            ),
+        ));
+
         $this->render('list',array(
-            'dataProvider'=>$dataProvider,
+            'categoryProvider'=>$categoryProvider,
+            'productProvider'=>$productProvider,
         ));
     }
 
@@ -202,7 +231,7 @@ class CategoryController extends Controller
 	}
 
     /**
-     * @return StaticPagesModule
+     * @return CatalogueModule
      */
     private function getCatalogueModule() {
         return Yii::app()->getModule("catalogue");

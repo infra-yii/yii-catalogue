@@ -2,17 +2,15 @@
 class CatalogueModule extends CWebModule{
 
     public $categoryModelClass = "CatalogueCategory";
+    public $productModelClass = "Product";
 
     public $infoformView = "_infoform";
 
     /**
-     * Returns model class object
-     * @return StaticPage
+     * @return array AdminGenModule integration
      */
-    public function model()
+    public function adminGenLinks()
     {
-        return Category::model($this->categoryModelClass);
+        return array('url' => array("/catalogue/category/admin"), 'label' => Yii::t("app", "Manage Categories"), 'visible' => !Yii::app()->user->isGuest);
     }
-
-
 }
