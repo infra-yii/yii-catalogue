@@ -40,6 +40,13 @@ class CatalogueProduct extends BaseProduct
         return true;
     }
 
+    public function url($normalize = false)
+    {
+        $u = array(Yii::app()->getModule("catalogue")->actionProductView, "id" => $this->path ? $this->path : $this->id);
+
+        return $normalize ? CHtml::normalizeUrl($u) : $u;
+    }
+
     public function rules()
     {
         $rules = parent::rules();
@@ -49,12 +56,11 @@ class CatalogueProduct extends BaseProduct
     }
 
     public function behaviors()
-    {
-        return array(
-            'activerecord-relation' => array(
+    {   $behaviors = parent::behaviors();
+        $behaviors['activerecord-relation'] = array(
                 'class' => 'ext.yiiext.behaviors.activerecord-relation.EActiveRecordRelationBehavior',
-            )
-        );
+            );
+        return $behaviors;
     }
 
     /**

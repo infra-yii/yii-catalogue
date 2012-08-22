@@ -78,7 +78,7 @@ class ProductController extends Controller
                 $model->info->product_id = $model->id;
                 $model->info->save();
 
-				$this->redirect(array($this->getCatalogueModule()->viewProduct,'id'=>$model->id));
+				$this->redirect(array($this->getCatalogueModule()->actionProductView,'id'=>$model->id));
              }
 
 
@@ -113,7 +113,7 @@ class ProductController extends Controller
             $model->info->save();
 			$model->attributes=$_POST[$this->getModelClass()];
 			if($model->save())
-				$this->redirect(array($this->getCatalogueModule()->viewProduct,'id'=>$model->id));
+				$this->redirect(array($this->getCatalogueModule()->actionProductView,'id'=>$model->id));
 		}
 
 		$this->render('update',array(

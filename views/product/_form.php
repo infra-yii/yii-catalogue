@@ -59,14 +59,15 @@ if($modelRefl->implementsInterface("ImagesHolderModel")) {
         <div class="row">
             <?php echo $form->labelEx($model,'categories'); ?>
             <?php echo $form->listBox($model, 'categories',
-            CHtml::listData(Category::model()->findAll(), 'id', 'title'),
-            array('multiple' => 'multiple','class'=>'categories')); ?>
+                CHtml::listData(Category::model()->findAll(), 'id', 'title'),
+                array('multiple' => 'multiple','class'=>'categories')); ?>
         </div>
 
     <div class="row">
         <?php echo $form->labelEx($model,'base_category_id'); ?>
         <?php echo $form->dropDownList($model, 'base_category_id',
-        CHtml::listData(Category::model()->findAll(), 'id', 'title'),array('class'=>'base_category')); ?>
+            CHtml::listData(Category::model()->findAll(), 'id', 'title'),
+            array('class'=>'base_category')); ?>
     </div>
         
         
@@ -88,7 +89,7 @@ if($modelRefl->implementsInterface("ImagesHolderModel")) {
 		<?php echo $form->error($model,'short_description'); ?>
 	</div>
 
-    if($infoForm) <?$this->renderPartial($infoForm, array("model" => $model))?>
+    <? if ($infoForm) $this->renderPartial($infoForm, array("model" => $model))?>
 
 
     <?if(count($imageHolders)){?>
