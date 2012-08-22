@@ -1,6 +1,6 @@
 <?php
 /* @var $this ProductController */
-/* @var $model Product */
+/* @var $model CatalogueProduct */
 
 $this->breadcrumbs=array(
 	'Products'=>array('index'),

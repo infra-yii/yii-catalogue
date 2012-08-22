@@ -1,6 +1,6 @@
 <?php
 /* @var $this ProductController */
-/* @var $model Product */
+/* @var $model CatalogueProduct */
 
 $this->breadcrumbs=array(
 	'Products'=>array('index'),
@@ -15,4 +15,4 @@ $this->menu=array(
 
 <h1>Create Product</h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model,'infoform'=>$infoform)); ?>
+<?php echo $this->renderPartial('_form', array('model'=>$model,'infoForm'=>$infoform)); ?>
