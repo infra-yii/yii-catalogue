@@ -1,11 +1,16 @@
 <?php
 class CatalogueModule extends CWebModule{
 
+
     public $categoryModelClass = "CatalogueCategory";
-    public $productModelClass = "Product";
 
-    public $infoformView = "_infoform";
+    public $infoFormView = "_infoForm";
 
+    public $viewProduct = 'view';
+    public $actionProductView = "/catalogue/product/view";
+
+    public $productModelClass = "CatalogueProduct";
+    public $productInfoModelClass = "CatalogueProductInfo";
     /**
      * @return array AdminGenModule integration
      */

@@ -14,7 +14,7 @@
  * @property string $short_description
  *
  * @property mixed $tblCategories
- * @property ProductInfo[] $productInfos
+ * @property CatalogueProductInfo[] $productInfos
  */
 abstract class BaseProduct extends GxActiveRecord {
 

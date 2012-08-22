@@ -13,7 +13,7 @@
  * @property integer $product_id
  * @property string $description
  *
- * @property Product $product
+ * @property CatalogueProduct $product
  */
 abstract class BaseProductInfo extends GxActiveRecord {
 

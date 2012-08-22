@@ -51,7 +51,7 @@ class ProductController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
+		$this->render($this->getCatalogueModule()->viewProduct,array(
 			'model'=>$this->loadModel($id),
 		));
 	}
@@ -61,26 +61,32 @@ class ProductController extends Controller
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionCreate()
-	{
-		$model=new Product;
+	{   $modelProduct = $this->getModelClass();
+		$model=new $modelProduct;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['Product']))
+		if(isset($_POST[$this->getModelClass()]))
 		{
-            $model->info = new ProductInfo();
-            $model->info->attributes = $_POST['Product']['info'];
-            $model->info->save();
 
-			$model->attributes=$_POST['Product'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			$model->attributes=$_POST[$this->getModelClass()];
+
+            $model->info = new CatalogueProductInfo();
+            $model->info->attributes = $_POST[$this->getModelClass()]['info'];
+
+			if($model->save()){
+                $model->info->product_id = $model->id;
+                $model->info->save();
+
+				$this->redirect(array($this->getCatalogueModule()->actionProductView,'id'=>$model->id));
+             }
+
+
 		}
 
 		$this->render('create',array(
 			'model'=>$model,
-            'infoform'=> $this->getCatalogueModule()->infoformView,
+            'infoForm'=> $this->getCatalogueModule()->infoFormView,
 		));
 	}
 
@@ -90,7 +96,7 @@ class ProductController extends Controller
 	 * @param integer $id the ID of the model to be updated
 	 */
     /**
-     * @property ProductInfo $info
+     * @property CatalogueProductInfo $info
      */
 	public function actionUpdate($id)
 	{
@@ -101,19 +107,18 @@ class ProductController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Product']))
+		if(isset($_POST[$this->getModelClass()]))
 		{
-            $model->info->attributes = $_POST['Product']['info'];
+            $model->info->attributes = $_POST[$this->getModelClass()]['info'];
             $model->info->save();
-
-			$model->attributes=$_POST['Product'];
+			$model->attributes=$_POST[$this->getModelClass()];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array($this->getCatalogueModule()->actionProductView,'id'=>$model->id));
 		}
 
 		$this->render('update',array(
 			'model'=>$model,
-            'infoform'=> $this->getCatalogueModule()->infoformView,
+            'infoForm'=> $this->getCatalogueModule()->infoFormView,
 		));
 	}
 
@@ -136,7 +141,7 @@ class ProductController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Product');
+		$dataProvider=new CActiveDataProvider($this->getCatalogueModule()->productModelClass);
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -147,7 +152,7 @@ class ProductController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Product('search');
+		$model=new CatalogueProduct('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Product']))
 			$model->attributes=$_GET['Product'];
@@ -164,6 +169,10 @@ class ProductController extends Controller
         return Yii::app()->getModule("catalogue");
     }
 
+    private function getModelClass() {
+        return $this->getCatalogueModule()->productModelClass;
+    }
+
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
@@ -171,7 +180,11 @@ class ProductController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Product::model()->findByPk($id);
+        if(is_numeric($id)) {
+            $model= CatalogueProduct::model()->findByPk($id);
+        } else {
+            $model= CatalogueProduct::model()->findByPath($id);
+        }
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;

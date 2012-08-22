@@ -6,7 +6,7 @@ class m120817_115745_catalogue extends CDbMigration
 	{
            $this->createTable('{{category}}', array(
                 'id' => 'pk',
-                'parent_id' => 'int',
+                'parent_id' => 'int DEFAULT NULL',
                 'sorting' => 'tinyint(3)',
                 'title' => 'varchar (200) NOT NULL',
             ));

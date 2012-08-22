@@ -1,6 +1,6 @@
 <?php
 /* @var $this ProductController */
-/* @var $model Product */
+/* @var $model CatalogueProduct */
 ?>
 
 <div class="view">
@@ -16,6 +16,7 @@
 	<b><?php echo CHtml::encode($data->getAttributeLabel('short_description')); ?>:</b>
 	<?php echo CHtml::encode($data->short_description); ?>
 	<br />
+
 
 
 </div>
