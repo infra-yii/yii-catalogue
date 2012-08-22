@@ -11,11 +11,17 @@ class CatalogueModule extends CWebModule{
 
     public $productModelClass = "CatalogueProduct";
     public $productInfoModelClass = "CatalogueProductInfo";
+
     /**
      * @return array AdminGenModule integration
      */
     public function adminGenLinks()
     {
-        return array('url' => array("/catalogue/category/admin"), 'label' => Yii::t("app", "Manage Categories"), 'visible' => !Yii::app()->user->isGuest);
+        $menuItems =array('label'=>'Catalogue', 'url'=>'', 'items'=>array(
+            array('url' => array("/catalogue/category/admin"), 'label' => Yii::t("app", "Manage Categories"), 'visible' => !Yii::app()->user->isGuest),
+            array('url' => array("/catalogue/product/admin"), 'label' => Yii::t("app", "Manage Product"), 'visible' => !Yii::app()->user->isGuest)
+        ));
+        return $menuItems;
     }
+
 }
