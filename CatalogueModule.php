@@ -17,5 +17,11 @@ class CatalogueModule extends CWebModule{
         return Category::model($this->categoryModelClass);
     }
 
-
+    /**
+     * @return array AdminGenModule integration
+     */
+    public function adminGenLinks()
+    {
+        return array('url' => array("/catalogue/product/admin"), 'label' => Yii::t("app", "Manage Product"), 'visible' => !Yii::app()->user->isGuest);
+    }
 }
