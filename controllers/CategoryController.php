@@ -69,8 +69,9 @@ class CategoryController extends Controller
         // $this->performAjaxValidation($model);
 
         if (isset($_POST[$this->getModelClass()])) {
-            // TODO: add ability to change the class
-            $model->info = new CategoryInfo();
+            $infoClass = $this->getCatalogueModule()->categoryInfoModelClass;
+
+            $model->info = new $infoClass;
             $model->info->attributes = $_POST[$this->getModelClass()]['info'];
 
             $model->attributes = $_POST[$this->getModelClass()];
@@ -84,7 +85,7 @@ class CategoryController extends Controller
 
         $this->render('create', array(
             'model' => $model,
-            'infoform' => $this->getCatalogueModule()->infoformView,
+            'infoform' => $this->getCatalogueModule()->categoryInfoFormView,
         ));
     }
 
@@ -101,8 +102,6 @@ class CategoryController extends Controller
         // $this->performAjaxValidation($model);
 
         if (isset($_POST[$this->getModelClass()])) {
-            // TODO: WHY DO YOU CREATE IT AGAIN?!!!!!!!
-            $model->info = new CategoryInfo();
             $model->info->attributes = $_POST[$this->getModelClass()]['info'];
 
             $model->attributes = $_POST[$this->getModelClass()];
@@ -116,7 +115,7 @@ class CategoryController extends Controller
 
         $this->render('update', array(
             'model' => $model,
-            'infoform' => $this->getCatalogueModule()->infoformView,
+            'infoform' => $this->getCatalogueModule()->categoryInfoFormView,
         ));
     }
 
@@ -141,7 +140,7 @@ class CategoryController extends Controller
     {
         $dataProvider = new CActiveDataProvider($this->getCatalogueModule()->categoryModelClass, array(
             'criteria' => array(
-                'condition' => 'parent_id=0',
+                'condition' => 'parent_id is NULL',
                 'order' => 'sorting DESC',
                 'with' => array('picHolder'),
             ),

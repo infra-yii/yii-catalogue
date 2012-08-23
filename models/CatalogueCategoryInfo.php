@@ -2,7 +2,7 @@
 
 Yii::import('catalogue.models._base.BaseCatalogueCategoryInfo');
 
-class CategoryInfo extends BaseCatalogueCategoryInfo
+class CatalogueCategoryInfo extends BaseCatalogueCategoryInfo
 {
     public static function model($className = __CLASS__)
     {
