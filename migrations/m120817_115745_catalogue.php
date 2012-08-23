@@ -2,58 +2,47 @@
 
 class m120817_115745_catalogue extends CDbMigration
 {
-        public function up()
-	{
-           $this->createTable('{{category}}', array(
-                'id' => 'pk',
-                'parent_id' => 'int DEFAULT NULL',
-                'sorting' => 'tinyint(3)',
-                'title' => 'varchar (200) NOT NULL',
-            ));
+    public function safeUp()
+    {
+        $this->createTable('{{catalogue_category}}', array(
+            'id' => 'pk',
+            'parent_id' => 'int DEFAULT NULL',
+            'sorting' => 'tinyint(3)',
+            'title' => 'varchar (200) NOT NULL',
+        ));
 
-            $this->createTable('{{product}}', array(
-                'id' => 'pk',
-                'title' => 'varchar (200) NOT NULL',
-                'short_description' => 'tinytext NOT NULL',
-            ));
-            
-            $this->createTable('{{product_info}}', array(
-                'id' => 'pk',
-                'product_id' => 'int',
-                'description' => 'text DEFAULT NULL',
-                'UNIQUE KEY `product_id` (`product_id`)',
-            ));
-            
-            $this->createTable('{{category_to_product}}', array(
-                'product_id' => 'int',
-                'category_id' => 'int',
-                'PRIMARY KEY (`product_id`, `category_id`)',
-            ));
-                        
-            $this->addForeignKey("parent_category", "{{category}}", "parent_id", "{{category}}", "id",null,"CASCADE");
-            $this->addForeignKey("product_description", "{{product_info}}", "product_id", "{{product}}", "id", "CASCADE", "CASCADE");
-            
-            $this->addForeignKey("product_product", "{{category_to_product}}", "product_id", "{{product}}", "id", "CASCADE", "CASCADE");
-            $this->addForeignKey("category_category", "{{category_to_product}}", "category_id", "{{category}}", "id", "CASCADE", "CASCADE");
-	}
+        $this->createTable('{{catalogue_product}}', array(
+            'id' => 'pk',
+            'title' => 'varchar (200) NOT NULL',
+            'short_description' => 'tinytext NOT NULL',
+        ));
 
-	public function down()
-	{
-                $this->dropTable('{{category}}');
-                $this->dropTable('{{product}}');
-                $this->dropTable('{{product_description}}');
-                $this->dropTable('{{category_to_product}}');
-		return false;
-	}
+        $this->createTable('{{catalogue_product_info}}', array(
+            'id' => 'pk',
+            'product_id' => 'int',
+            'description' => 'text DEFAULT NULL',
+            'UNIQUE KEY `product_id` (`product_id`)',
+        ));
 
-	/*
-	// Use safeUp/safeDown to do migration with transaction
-	public function safeUp()
-	{
-	}
+        $this->createTable('{{catalogue_category_to_product}}', array(
+            'product_id' => 'int',
+            'category_id' => 'int',
+            'PRIMARY KEY (`product_id`, `category_id`)',
+        ));
 
-	public function safeDown()
-	{
-	}
-	*/
+        $this->addForeignKey("catalogue_parent_category", "{{catalogue_category}}", "parent_id", "{{catalogue_category}}", "id");
+        $this->addForeignKey("catalogue_product_description", "{{catalogue_product_info}}", "product_id", "{{catalogue_product}}", "id", "CASCADE", "CASCADE");
+
+        $this->addForeignKey("catalogue_product_product", "{{catalogue_category_to_product}}", "product_id", "{{catalogue_product}}", "id", "CASCADE", "CASCADE");
+        $this->addForeignKey("catalogue_category_category", "{{catalogue_category_to_product}}", "category_id", "{{catalogue_category}}", "id", "CASCADE", "CASCADE");
+    }
+
+    public function safeDown()
+    {
+        $this->dropTable('{{catalogue_category}}');
+        $this->dropTable('{{catalogue_product}}');
+        $this->dropTable('{{catalogue_product_description}}');
+        $this->dropTable('{{catalogue_category_to_product}}');
+        return false;
+    }
 }

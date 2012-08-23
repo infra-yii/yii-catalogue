@@ -1,11 +1,11 @@
 <?php
 
-Yii::import('catalogue.models._base.BaseProduct');
+Yii::import('catalogue.models._base.BaseCatalogueProduct');
 
 /**
  * @property CatalogueProductInfo $info
  */
-class CatalogueProduct extends BaseProduct
+class CatalogueProduct extends BaseCatalogueProduct
 {
 
     public static function model($className = null)
@@ -15,7 +15,8 @@ class CatalogueProduct extends BaseProduct
     }
 
     public function relations()
-    {   $relations = parent::relations();
+    {
+        $relations = parent::relations();
         unset ($relations['tblCategories']);
         unset ($relations['productInfos']);
 
@@ -33,8 +34,9 @@ class CatalogueProduct extends BaseProduct
     }
 
     public function beforeSave()
-    {   parent::beforeSave();
-        if(Yii::app()->getComponent("i18n2ascii")) {
+    {
+        parent::beforeSave();
+        if (Yii::app()->getComponent("i18n2ascii")) {
             Yii::app()->getComponent("i18n2ascii")->setModelUrlAlias($this, $this->title);
         }
         return true;
@@ -56,10 +58,11 @@ class CatalogueProduct extends BaseProduct
     }
 
     public function behaviors()
-    {   $behaviors = parent::behaviors();
+    {
+        $behaviors = parent::behaviors();
         $behaviors['activerecord-relation'] = array(
-                'class' => 'ext.yiiext.behaviors.activerecord-relation.EActiveRecordRelationBehavior',
-            );
+            'class' => 'ext.yiiext.behaviors.activerecord-relation.EActiveRecordRelationBehavior',
+        );
         return $behaviors;
     }
 

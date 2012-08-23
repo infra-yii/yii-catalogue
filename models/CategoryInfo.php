@@ -1,14 +1,16 @@
 <?php
 
-Yii::import('catalogue.models._base.BaseCategoryInfo');
+Yii::import('catalogue.models._base.BaseCatalogueCategoryInfo');
 
-class CategoryInfo extends BaseCategoryInfo
+class CategoryInfo extends BaseCatalogueCategoryInfo
 {
-	public static function model($className=__CLASS__) {
-		return parent::model($className);
-	}
+    public static function model($className = __CLASS__)
+    {
+        return parent::model($className);
+    }
 
-    public function relations() {
+    public function relations()
+    {
         return array(
             'category' => array(self::BELONGS_TO, $this->getModelClass(), 'category_id'),
         );
@@ -17,11 +19,13 @@ class CategoryInfo extends BaseCategoryInfo
     /**
      * @return CatalogueModule
      */
-    private function getCatalogueModule() {
+    private function getCatalogueModule()
+    {
         return Yii::app()->getModule("catalogue");
     }
 
-    private function getModelClass() {
+    private function getModelClass()
+    {
         return $this->getCatalogueModule()->categoryModelClass;
     }
 }

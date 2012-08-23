@@ -1,5 +1,6 @@
 <?php
-class CatalogueModule extends CWebModule{
+class CatalogueModule extends CWebModule
+{
 
 
     public $categoryModelClass = "CatalogueCategory";
@@ -18,7 +19,7 @@ class CatalogueModule extends CWebModule{
      */
     public function adminGenLinks()
     {
-        $menuItems =array('label'=>'Catalogue', 'url'=>'', 'items'=>array(
+        $menuItems = array('label' => 'Catalogue', 'url' => '', 'items' => array(
             array('url' => array("/catalogue/category/admin"), 'label' => Yii::t("app", "Manage Categories"), 'visible' => !Yii::app()->user->isGuest),
             array('url' => array("/catalogue/product/admin"), 'label' => Yii::t("app", "Manage Product"), 'visible' => !Yii::app()->user->isGuest)
         ));
