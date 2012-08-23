@@ -2,7 +2,7 @@
 class CatalogueModule extends CWebModule{
 
     public $infoFormView = "_infoForm";
-    public $viewProduct = 'view';
+    public $viewProduct = '//showcase/viewProduct';
     public $actionProductView = "/catalogue/product/view";
 
     public $categoryModelClass = "CatalogueCategory";

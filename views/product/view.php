@@ -18,9 +18,6 @@ $this->menu=array(
 
 <h1>View Product #<?php echo $model->id; ?></h1>
 
-<? $this->widget("imagesHolder.widgets.heldImages.HeldImages", array("holder" => $model->listHolder, "size" => "tiny")) ?>
-<? $this->widget("imagesHolder.widgets.heldImages.HeldImages", array("holder" => $model->picHolder, "size" => "tiny")) ?>
-
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
