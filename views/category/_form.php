@@ -39,11 +39,19 @@ if($modelRefl->implementsInterface("ImagesHolderModel")) {
 		<?php echo $form->error($model,'sorting'); ?>
 	</div>
 
+    <div class="row">
+        <?php echo $form->labelEx($model,'path'); ?>
+        <?php echo $form->textField($model,'path',array('size'=>60,'maxlength'=>200)); ?>
+        <?php echo $form->error($model,'path'); ?>
+    </div>
+
 	<div class="row">
 		<?php echo $form->labelEx($model,'title'); ?>
 		<?php echo $form->textField($model,'title',array('size'=>60,'maxlength'=>200)); ?>
 		<?php echo $form->error($model,'title'); ?>
 	</div>
+
+    <?$this->renderPartial($infoform, array("model" => $model))?>
 
     <?if(count($imageHolders)){?>
     <fieldset>
