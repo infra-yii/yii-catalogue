@@ -1,8 +1,8 @@
 <?php
 
-Yii::import('catalogue.models._base.BaseCategory');
+Yii::import('catalogue.models._base.BaseCatalogueCategory');
 
-class CatalogueCategory extends BaseCategory
+class CatalogueCategory extends BaseCatalogueCategory
 {
     /**
      * @static
@@ -27,7 +27,7 @@ class CatalogueCategory extends BaseCategory
     {
         parent::beforeSave();
 
-        if(Yii::app()->getComponent("i18n2ascii")) {
+        if (Yii::app()->getComponent("i18n2ascii")) {
             Yii::app()->getComponent("i18n2ascii")->setModelUrlAlias($this, $this->title);
         }
         return true;

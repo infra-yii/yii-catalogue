@@ -1,8 +1,8 @@
 <?php
 
-Yii::import('catalogue.models._base.BaseProductInfo');
+Yii::import('catalogue.models._base.BaseCatalogueProductInfo');
 
-class CatalogueProductInfo extends BaseProductInfo
+class CatalogueProductInfo extends BaseCatalogueProductInfo
 {
     public static function model($className = null)
     {
@@ -11,7 +11,8 @@ class CatalogueProductInfo extends BaseProductInfo
     }
 
     public function relations()
-    {   $relations = parent::relations();
+    {
+        $relations = parent::relations();
 
         $relations['product'][1] = Yii::app()->getModule("catalogue")->productModelClass;
 
