@@ -30,7 +30,7 @@ class m120817_115745_catalogue extends CDbMigration
             'PRIMARY KEY (`product_id`, `category_id`)',
         ));
 
-        $this->addForeignKey("catalogue_parent_category", "{{catalogue_category}}", "parent_id", "{{catalogue_category}}", "id");
+        $this->addForeignKey("catalogue_parent_category", "{{catalogue_category}}", "parent_id", "{{catalogue_category}}", "id", null, "CASCADE");
         $this->addForeignKey("catalogue_product_description", "{{catalogue_product_info}}", "product_id", "{{catalogue_product}}", "id", "CASCADE", "CASCADE");
 
         $this->addForeignKey("catalogue_product_product", "{{catalogue_category_to_product}}", "product_id", "{{catalogue_product}}", "id", "CASCADE", "CASCADE");

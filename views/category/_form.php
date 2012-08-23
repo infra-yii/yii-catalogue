@@ -20,7 +20,7 @@ $module = Yii::app()->getModule("catalogue");
 
     <div class="row">
         <?php echo $form->labelEx($model, 'parent_id'); ?>
-        <?php echo $form->dropDownList($model, 'parent_id', array("0" => "None") + CHtml::listData(Category::model()->findAll(), 'id', 'title')); ?>
+        <?php echo $form->dropDownList($model, 'parent_id', array("" => "None") + CHtml::listData(Category::model()->findAll(), 'id', 'title')); ?>
         <?php echo $form->error($model, 'parent_id'); ?>
     </div>
 
