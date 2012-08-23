@@ -80,7 +80,6 @@ $('.categories').change(function(){
 
     <? if ($infoForm) $this->renderPartial($infoForm, array("model" => $model))?>
 
-
     <?$form->inject()?>
 
     <div class="row buttons">
