@@ -14,12 +14,17 @@
  * @property integer $sorting
  * @property string $title
  * @property string $path
+ * @property integer $pic_holder_id
+ * @property integer $list_holder_id
  *
+ * @property ImagesHolder $listHolder
  * @property CatalogueCategory $parent
  * @property CatalogueCategory[] $catalogueCategories
+ * @property ImagesHolder $picHolder
  * @property CatalogueCategoryInfo[] $catalogueCategoryInfos
  * @property mixed $tblCatalogueProducts
  * @property CatalogueProduct[] $catalogueProducts
+ * @property mixed $tblCatalogueProperties
  */
 abstract class BaseCatalogueCategory extends GxActiveRecord {
 
@@ -42,9 +47,9 @@ abstract class BaseCatalogueCategory extends GxActiveRecord {
     public function rules() {
         return array(
             array('title', 'required'),
-            array('parent_id, sorting, pic_holder_id', 'numerical', 'integerOnly'=>true),
+            array('parent_id, sorting', 'numerical', 'integerOnly'=>true),
             array('title, path', 'length', 'max'=>200),
-            array('parent_id, sorting, path, pic_holder_id', 'default', 'setOnEmpty' => true, 'value' => null),
+            array('parent_id, sorting, path', 'default', 'setOnEmpty' => true, 'value' => null),
             array('id, parent_id, sorting, title, path', 'safe', 'on'=>'search'),
         );
     }
@@ -56,12 +61,14 @@ abstract class BaseCatalogueCategory extends GxActiveRecord {
             'catalogueCategoryInfos' => array(self::HAS_MANY, 'CatalogueCategoryInfo', 'category_id'),
             'tblCatalogueProducts' => array(self::MANY_MANY, 'CatalogueProduct', '{{catalogue_category_to_product}}(category_id, product_id)'),
             'catalogueProducts' => array(self::HAS_MANY, 'CatalogueProduct', 'base_category_id'),
+            'tblCatalogueProperties' => array(self::MANY_MANY, 'CatalogueProperty', '{{catalogue_property_to_category}}(category_id, property_id)'),
         );
     }
 
     public function pivotModels() {
         return array(
             'tblCatalogueProducts' => 'CatalogueCategoryToProduct',
+            'tblCatalogueProperties' => 'CataloguePropertyToCategory',
         );
     }
 
@@ -77,6 +84,7 @@ abstract class BaseCatalogueCategory extends GxActiveRecord {
             'catalogueCategoryInfos' => null,
             'tblCatalogueProducts' => null,
             'catalogueProducts' => null,
+            'tblCatalogueProperties' => null,
         );
     }
 

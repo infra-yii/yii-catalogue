@@ -42,8 +42,8 @@ $module = Yii::app()->getModule("catalogue");
         <?php echo $form->error($model, 'title'); ?>
     </div>
 
-    <?$this->renderPartial($infoform, array("model" => $model))?>
-
+    <? $this->renderPartial($infoform, array("model" => $model))?>
+    <? $this->renderPartial('_properties', array("model" => $model))?>
     <?$form->inject()?>
 
 

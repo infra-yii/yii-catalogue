@@ -16,11 +16,16 @@ class CatalogueCategory extends BaseCatalogueCategory
     }
 
     public function relations()
-    {
-        return array(
-            'products' => array(self::MANY_MANY, 'Product', '{{category_to_product}}(product_id, category_id)', 'together' => true),
-            'info' => array(self::HAS_ONE, 'CategoryInfo', 'category_id'),
-        );
+    {   $relations = parent::relations();
+        unset ($relations['tblCatalogueCategories']);
+        unset ($relations['catalogueProductInfos']);
+        unset ($relations['tblCatalogueProperties']);
+
+        $relations['products'] = array(self::MANY_MANY, Yii::app()->getModule("catalogue")->categoryModelClass, '{{catalogue_category_to_product}}(product_id, category_id)');
+        $relations['info'] = array(self::HAS_ONE, Yii::app()->getModule("catalogue")->categoryInfoModelClass, 'category_id');
+        $relations['properties'] = array(self::MANY_MANY, 'CatalogueProperty', '{{catalogue_property_to_category}}(category_id, property_id)');
+
+        return $relations;
     }
 
     public function beforeSave()
@@ -44,6 +49,12 @@ class CatalogueCategory extends BaseCatalogueCategory
         return $normalize ? CHtml::normalizeUrl($u) : $u;
     }
 
+    public function rules()
+    {
+        $rules = parent::rules();
+        $rules[] = array("properties", "safe");
+        return $rules;
+    }
     /**
      * @return mixed
      */
@@ -76,6 +87,15 @@ class CatalogueCategory extends BaseCatalogueCategory
 
         return $map[0]['subcategories'];
 
+    }
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['activerecord-relation'] = array(
+            'class' => 'ext.yiiext.behaviors.activerecord-relation.EActiveRecordRelationBehavior',
+        );
+        return $behaviors;
     }
 
 }

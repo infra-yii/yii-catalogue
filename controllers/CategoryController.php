@@ -70,14 +70,29 @@ class CategoryController extends Controller
 
         if (isset($_POST[$this->getModelClass()])) {
             $infoClass = $this->getCatalogueModule()->categoryInfoModelClass;
+            $propertiesClass = $this->getCatalogueModule()->categoryPropertiesModelClass;
+
+            $properties = $_POST[$this->getModelClass()]['properties'];
+            unset($_POST[$this->getModelClass()]['properties']);
+
+
+            $model->attributes = $_POST[$this->getModelClass()];
 
             $model->info = new $infoClass;
             $model->info->attributes = $_POST[$this->getModelClass()]['info'];
+            $model->info->save();
 
-            $model->attributes = $_POST[$this->getModelClass()];
             if ($model->save()) {
-                $model->info->category_id = $model->id;
-                $model->info->save();
+                //$model->info->category_id = $model->id;
+                //$model->info->save();
+                /*foreach($properties as $property){
+                    $propertiesObject = new $propertiesClass;
+                    $propertiesObject->attributes = $property;
+                    $propertiesObject->category_id = $model->id;
+                    $propertiesObject->save();
+                }
+                /*$model->properties->category_id = $model->id;
+                $model->properties->save();*/
 
                 $this->redirect(array('view', 'id' => $model->id));
             }
@@ -102,12 +117,40 @@ class CategoryController extends Controller
         // $this->performAjaxValidation($model);
 
         if (isset($_POST[$this->getModelClass()])) {
+            $propertiesClass = $this->getCatalogueModule()->categoryPropertiesModelClass;
+
             $model->info->attributes = $_POST[$this->getModelClass()]['info'];
+
+            $properties = $_POST[$this->getModelClass()]['properties'];
+            //unset($_POST[$this->getModelClass()]['properties']);
 
             $model->attributes = $_POST[$this->getModelClass()];
             if ($model->save()) {
                 $model->info->category_id = $model->id;
                 $model->info->save();
+
+                foreach($model->properties as $key=>$property){
+                    $prop_id = $property->attributes['id'];
+
+                    if($properties[$prop_id]['title']!='' && $properties[$prop_id]['delete']!=1){
+                        $prop = $model->properties[$key];
+                        $prop->attributes = $properties[$prop_id];
+                        $prop->save();
+                        unset($properties[$prop_id]);
+                    }else{
+                        $props = $model->properties;
+                        $props[$key]->delete();
+                        unset($properties[$prop_id]);
+                    }
+
+                }
+
+                foreach($properties as $property){
+                    $propertiesObject = new $propertiesClass;
+                    $propertiesObject->attributes = $property;
+                    $propertiesObject->category_id = $model->id;
+                    $propertiesObject->save();
+                }
 
                 $this->redirect(array('view', 'id' => $model->id));
             }
@@ -151,6 +194,21 @@ class CategoryController extends Controller
 
         $this->render('index', array(
             'dataProvider' => $dataProvider,
+        ));
+    }
+
+    /**
+     * Manages all models.
+     */
+    public function actionAdmin()
+    {   $c = $this->getModelClass();
+        $model = new $c('search');
+        $model->unsetAttributes(); // clear any default values
+        if (isset($_GET[$this->getModelClass()]))
+            $model->attributes = $_GET[$this->getModelClass()];
+
+        $this->render('admin', array(
+            'model' => $model,
         ));
     }
 

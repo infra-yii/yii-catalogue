@@ -17,11 +17,12 @@ class CatalogueProduct extends BaseCatalogueProduct
     public function relations()
     {
         $relations = parent::relations();
-        unset ($relations['tblCategories']);
-        unset ($relations['productInfos']);
-
-        $relations['categories'] = array(self::MANY_MANY, Yii::app()->getModule("catalogue")->categoryModelClass, '{{category_to_product}}(product_id, category_id)');
+        unset ($relations['tblCatalogueCategories']);
+        unset ($relations['catalogueProductInfos']);
+        unset ($relations['cataloguePropertiesValues']);
+        $relations['categories'] = array(self::MANY_MANY, Yii::app()->getModule("catalogue")->categoryModelClass, '{{catalogue_category_to_product}}(product_id, category_id)');
         $relations['info'] = array(self::HAS_ONE, Yii::app()->getModule("catalogue")->productInfoModelClass, 'product_id');
+        $relations['propval'] = array(self::HAS_MANY, 'CataloguePropertiesValue', 'product_id');
 
         return $relations;
     }
