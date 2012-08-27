@@ -11,6 +11,8 @@ class m120821_103109_categoryInfo extends CDbMigration
         ));
         $this->createIndex('catalogue_category_unique', '{{catalogue_category_info}}', 'category_id', true);
         $this->addForeignKey("catalogue_category_info_categ", "{{catalogue_category_info}}", "category_id", "{{catalogue_category}}", "id", "CASCADE", "CASCADE");
+
+
     }
 
     public function safeDown()

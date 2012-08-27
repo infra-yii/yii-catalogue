@@ -2,7 +2,10 @@
 
 Yii::import('catalogue.models._base.BaseCatalogueCategory');
 
-class CatalogueCategory extends BaseCatalogueCategory
+/**
+ * @property CatalogueProperty[] properties
+ */
+class CatalogueCategory extends BaseCatalogueCategory implements IFormPartialsInject
 {
     /**
      * @static
@@ -16,11 +19,29 @@ class CatalogueCategory extends BaseCatalogueCategory
     }
 
     public function relations()
-    {
-        return array(
-            'products' => array(self::MANY_MANY, 'Product', '{{category_to_product}}(product_id, category_id)', 'together' => true),
-            'info' => array(self::HAS_ONE, 'CategoryInfo', 'category_id'),
-        );
+    {   $relations = parent::relations();
+        unset ($relations['tblCatalogueCategories']);
+        unset ($relations['catalogueProductInfos']);
+        unset ($relations['tblCatalogueProperties']);
+
+        $relations['products'] = array(self::MANY_MANY, Yii::app()->getModule("catalogue")->categoryModelClass, '{{catalogue_category_to_product}}(product_id, category_id)');
+        $relations['info'] = array(self::HAS_ONE, Yii::app()->getModule("catalogue")->categoryInfoModelClass, 'category_id');
+        $relations['properties'] = array(self::MANY_MANY, 'CatalogueProperty', '{{catalogue_property_to_category}}(category_id, property_id)');
+
+        return $relations;
+    }
+
+    /**
+     * @param bool $onlyInherited
+     * @return CatalogueProperty[]
+     */
+    public function collectProperties($onlyInherited = false) {
+        $props = $onlyInherited ? array() : $this->properties;
+        if(!$this->parent) return $props;
+        foreach($this->parent->collectProperties() as $prop) {
+            $props[] = $prop;
+        }
+        return $props;
     }
 
     public function beforeSave()
@@ -44,38 +65,33 @@ class CatalogueCategory extends BaseCatalogueCategory
         return $normalize ? CHtml::normalizeUrl($u) : $u;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTree()
+    public function rules()
     {
-        $categoryTree = Yii::app()->db->createCommand('SELECT * FROM tbl_category')->queryAll();
-
-        return $this->_buildTree($categoryTree);
+        $rules = parent::rules();
+        $rules[] = array("properties", "safe");
+        return $rules;
     }
 
-    /**
-     * @param $categories
-     * @return mixed
-     */
-    private function _buildTree($categories)
+    public function behaviors()
     {
-
-        $map = array(
-            0 => array('subcategories' => array())
+        $behaviors = parent::behaviors();
+        $behaviors['activerecord-relation'] = array(
+            'class' => 'ext.yiiext.behaviors.activerecord-relation.EActiveRecordRelationBehavior',
         );
-
-        foreach ($categories as &$category) {
-            $category['subcategories'] = array();
-            $map[$category['id']] = &$category;
-        }
-
-        foreach ($categories as &$category) {
-            $map[$category['parent_id']]['subcategories'][] = &$category;
-        }
-
-        return $map[0]['subcategories'];
-
+        $behaviors['partial-inject'] = array(
+            'class' => 'ext.shared-core.form.FormPartialsInjectBehavior',
+        );
+        return $behaviors;
     }
 
+    /**
+     * @return array
+     */
+    public function formPartialsInject()
+    {
+        return array(
+            "_infoForm",
+            "_properties"
+        );
+    }
 }

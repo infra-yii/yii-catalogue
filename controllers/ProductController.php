@@ -63,6 +63,7 @@ class ProductController extends Controller
     public function actionCreate()
     {
         $modelProduct = $this->getModelClass();
+        $modelProductInfo = $this->getCatalogueModule()->productInfoModelClass;
         $model = new $modelProduct;
 
         // Uncomment the following line if AJAX validation is needed
@@ -71,20 +72,17 @@ class ProductController extends Controller
 
             $model->attributes = $_POST[$this->getModelClass()];
 
-            $model->info = new CatalogueProductInfo();
+            $model->info = new $modelProductInfo;
             $model->info->attributes = $_POST[$this->getModelClass()]['info'];
+            $model->info->save();
 
             if ($model->save()) {
-                $model->info->product_id = $model->id;
-                $model->info->save();
-
                 $this->redirect(array($this->getCatalogueModule()->actionProductView, 'id' => $model->id));
             }
         }
 
         $this->render('create', array(
             'model' => $model,
-            'infoForm' => $this->getCatalogueModule()->infoFormView,
         ));
     }
 
@@ -114,7 +112,6 @@ class ProductController extends Controller
 
         $this->render('update', array(
             'model' => $model,
-            'infoForm' => $this->getCatalogueModule()->infoFormView,
         ));
     }
 
@@ -147,11 +144,11 @@ class ProductController extends Controller
      * Manages all models.
      */
     public function actionAdmin()
-    {
-        $model = new CatalogueProduct('search');
+    {   $modelProduct = $this->getModelClass();
+        $model = new $modelProduct('search');
         $model->unsetAttributes(); // clear any default values
-        if (isset($_GET['Product']))
-            $model->attributes = $_GET['Product'];
+        if (isset($_GET[$this->getModelClass()]))
+            $model->attributes = $_GET[$this->getModelClass()];
 
         $this->render('admin', array(
             'model' => $model,

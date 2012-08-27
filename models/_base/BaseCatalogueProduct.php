@@ -14,10 +14,15 @@
  * @property string $short_description
  * @property string $path
  * @property integer $base_category_id
+ * @property integer $pic_holder_id
+ * @property integer $list_holder_id
  *
  * @property mixed $tblCatalogueCategories
+ * @property ImagesHolder $listHolder
  * @property CatalogueCategory $baseCategory
+ * @property ImagesHolder $picHolder
  * @property CatalogueProductInfo[] $catalogueProductInfos
+ * @property CataloguePropertiesValue[] $cataloguePropertiesValues
  */
 abstract class BaseCatalogueProduct extends GxActiveRecord {
 
@@ -52,6 +57,7 @@ abstract class BaseCatalogueProduct extends GxActiveRecord {
             'tblCatalogueCategories' => array(self::MANY_MANY, 'CatalogueCategory', '{{catalogue_category_to_product}}(product_id, category_id)'),
             'baseCategory' => array(self::BELONGS_TO, 'CatalogueCategory', 'base_category_id'),
             'catalogueProductInfos' => array(self::HAS_MANY, 'CatalogueProductInfo', 'product_id'),
+            'cataloguePropertiesValues' => array(self::HAS_MANY, 'CataloguePropertiesValue', 'product_id'),
         );
     }
 
@@ -71,6 +77,7 @@ abstract class BaseCatalogueProduct extends GxActiveRecord {
             'tblCatalogueCategories' => null,
             'baseCategory' => null,
             'catalogueProductInfos' => null,
+            'cataloguePropertiesValues' => null,
         );
     }
 

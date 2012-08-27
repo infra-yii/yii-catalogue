@@ -71,13 +71,15 @@ class CategoryController extends Controller
         if (isset($_POST[$this->getModelClass()])) {
             $infoClass = $this->getCatalogueModule()->categoryInfoModelClass;
 
+            $model->attributes = $_POST[$this->getModelClass()];
+
             $model->info = new $infoClass;
             $model->info->attributes = $_POST[$this->getModelClass()]['info'];
+            $model->info->save();
 
-            $model->attributes = $_POST[$this->getModelClass()];
             if ($model->save()) {
-                $model->info->category_id = $model->id;
-                $model->info->save();
+                $model->properties = $this->getNewProps();
+                $model->save();
 
                 $this->redirect(array('view', 'id' => $model->id));
             }
@@ -85,7 +87,6 @@ class CategoryController extends Controller
 
         $this->render('create', array(
             'model' => $model,
-            'infoform' => $this->getCatalogueModule()->categoryInfoFormView,
         ));
     }
 
@@ -97,17 +98,15 @@ class CategoryController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->loadModel($id)->with('info');
-
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
         if (isset($_POST[$this->getModelClass()])) {
             $model->info->attributes = $_POST[$this->getModelClass()]['info'];
 
             $model->attributes = $_POST[$this->getModelClass()];
             if ($model->save()) {
-                $model->info->category_id = $model->id;
                 $model->info->save();
+
+                $this->setActualProps($model);
+                $model->save();
 
                 $this->redirect(array('view', 'id' => $model->id));
             }
@@ -115,8 +114,43 @@ class CategoryController extends Controller
 
         $this->render('update', array(
             'model' => $model,
-            'infoform' => $this->getCatalogueModule()->categoryInfoFormView,
         ));
+    }
+
+    private function setActualProps(CatalogueCategory &$model) {
+        $properties = isset($_POST['properties']) ? $_POST['properties'] : array();
+        $props = $this->getNewProps();
+
+        foreach($properties as $id=>$v) {
+            if(isset($v["delete"])) continue;
+            foreach($model->properties as $p) {
+                if($p->id == $id) {
+                    if($p->title != $v["title"]) {
+                        $p->title = $v["title"];
+                        $p->save();
+                    }
+                    $props[] = $p;
+                }
+            }
+        }
+        $model->properties = $props;
+    }
+
+    private function getNewProps() {
+        $newProperties = isset($_POST['newProperties']) ? $_POST['newProperties'] : array();
+        $propertiesClass = $this->getCatalogueModule()->categoryPropertiesModelClass;
+
+        $props = array();
+        foreach($newProperties as $title) {
+            $p = CatalogueProperty::model()->findByAttributes(array("title"=>$title));
+            if(!$p) {
+                $p = new $propertiesClass();
+                $p->title = $title;
+                $p->save();
+            }
+            $props[] = $p;
+        }
+        return $props;
     }
 
     /**
@@ -151,6 +185,21 @@ class CategoryController extends Controller
 
         $this->render('index', array(
             'dataProvider' => $dataProvider,
+        ));
+    }
+
+    /**
+     * Manages all models.
+     */
+    public function actionAdmin()
+    {   $c = $this->getModelClass();
+        $model = new $c('search');
+        $model->unsetAttributes(); // clear any default values
+        if (isset($_GET[$this->getModelClass()]))
+            $model->attributes = $_GET[$this->getModelClass()];
+
+        $this->render('admin', array(
+            'model' => $model,
         ));
     }
 
