@@ -78,8 +78,6 @@ $('.categories').change(function(){
         <?php echo $form->error($model, 'short_description'); ?>
     </div>
 
-    <? if ($infoForm) $this->renderPartial($infoForm, array("model" => $model))?>
-    <? $this->renderPartial('_properties', array("model" => $model,'modelCategory' => $modelCategory))?>
     <?$form->inject()?>
 
     <div class="row buttons">

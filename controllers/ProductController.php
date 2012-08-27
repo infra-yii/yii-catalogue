@@ -106,13 +106,63 @@ class ProductController extends Controller
             $model->info->attributes = $_POST[$this->getModelClass()]['info'];
             $model->info->save();
             $model->attributes = $_POST[$this->getModelClass()];
-            if ($model->save())
+            if ($model->save()) {
+                $this->setPropertyValues($model);
                 $this->redirect(array($this->getCatalogueModule()->actionProductView, 'id' => $model->id));
+            }
         }
 
         $this->render('update', array(
             'model' => $model,
         ));
+    }
+
+    private function setPropertyValues(CatalogueProduct &$model) {
+        /* @var $props CatalogueProperty[] */
+        /* @var $vals CataloguePropertyValue[] */
+        $props = array();
+
+        foreach($model->categories as $c) {
+            if(is_numeric($c)) $c = CatalogueCategory::model()->findByPk($c);
+            foreach($c->collectProperties() as $p) {
+                $props[$p->id] = $p;
+            }
+        }
+        $vals = array();
+        foreach($model->propertiesValues as $v) {
+            $vals[$v->property_id] = $v;
+        }
+        $currentVals = isset($_POST["propValue"]) ? $_POST["propValue"] : array();
+
+        foreach($props as $id=>$prop) {
+            /* @var $value CataloguePropertyValue */
+            $value = isset($vals[$id]) ? $vals[$id] : null;
+            if($value) unset($vals[$id]);
+
+            // It's removed
+            if(!isset($currentVals[$id]) || !$currentVals[$id]) {
+                if($value) {
+                    $value->delete();
+                }
+                continue;
+            }
+
+            // It isn't present
+            if(!$value) {
+                $value = new CataloguePropertyValue();
+                $value->product_id = $model->id;
+                $value->property_id = $id;
+            }
+            // It's updated
+            if($value->value != $currentVals[$id]) {
+                $value->value = $currentVals[$id];
+                $value->save();
+            }
+        }
+
+        foreach($vals as $v) {
+            $v->delete();
+        }
     }
 
     /**

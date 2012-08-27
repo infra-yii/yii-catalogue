@@ -4,8 +4,10 @@ Yii::import('catalogue.models._base.BaseCatalogueProduct');
 
 /**
  * @property CatalogueProductInfo $info
+ * @property CataloguePropertyValue[] propertiesValues
+ * @property CatalogueCategory[] categories
  */
-class CatalogueProduct extends BaseCatalogueProduct
+class CatalogueProduct extends BaseCatalogueProduct implements IFormPartialsInject
 {
 
     public static function model($className = null)
@@ -22,7 +24,7 @@ class CatalogueProduct extends BaseCatalogueProduct
         unset ($relations['cataloguePropertiesValues']);
         $relations['categories'] = array(self::MANY_MANY, Yii::app()->getModule("catalogue")->categoryModelClass, '{{catalogue_category_to_product}}(product_id, category_id)');
         $relations['info'] = array(self::HAS_ONE, Yii::app()->getModule("catalogue")->productInfoModelClass, 'product_id');
-        $relations['propval'] = array(self::HAS_MANY, 'CataloguePropertiesValue', 'product_id');
+        $relations['propertiesValues'] = array(self::HAS_MANY, 'CataloguePropertyValue', 'product_id');
 
         return $relations;
     }
@@ -64,7 +66,22 @@ class CatalogueProduct extends BaseCatalogueProduct
         $behaviors['activerecord-relation'] = array(
             'class' => 'ext.yiiext.behaviors.activerecord-relation.EActiveRecordRelationBehavior',
         );
+        $behaviors['partial-inject'] = array(
+            'class' => 'ext.shared-core.form.FormPartialsInjectBehavior',
+        );
         return $behaviors;
+    }
+
+    /**
+     * @return array
+     */
+    public function formPartialsInject()
+    {
+        $partials = array("_infoForm");
+        if(!$this->isNewRecord) {
+            $partials[] = "_properties";
+        }
+        return $partials;
     }
 
     /**
