@@ -2,7 +2,10 @@
 
 Yii::import('catalogue.models._base.BaseCatalogueCategory');
 
-class CatalogueCategory extends BaseCatalogueCategory
+/**
+ * @property CatalogueProperty[] properties
+ */
+class CatalogueCategory extends BaseCatalogueCategory implements IFormPartialsInject
 {
     /**
      * @static
@@ -26,6 +29,19 @@ class CatalogueCategory extends BaseCatalogueCategory
         $relations['properties'] = array(self::MANY_MANY, 'CatalogueProperty', '{{catalogue_property_to_category}}(category_id, property_id)');
 
         return $relations;
+    }
+
+    /**
+     * @param bool $onlyInherited
+     * @return CatalogueProperty[]
+     */
+    public function collectProperties($onlyInherited = false) {
+        $props = $onlyInherited ? array() : $this->properties;
+        if(!$this->parent) return $props;
+        foreach($this->parent->collectProperties() as $prop) {
+            $props[] = $prop;
+        }
+        return $props;
     }
 
     public function beforeSave()
@@ -55,39 +71,6 @@ class CatalogueCategory extends BaseCatalogueCategory
         $rules[] = array("properties", "safe");
         return $rules;
     }
-    /**
-     * @return mixed
-     */
-    public function getTree()
-    {
-        $categoryTree = Yii::app()->db->createCommand('SELECT * FROM tbl_category')->queryAll();
-
-        return $this->_buildTree($categoryTree);
-    }
-
-    /**
-     * @param $categories
-     * @return mixed
-     */
-    private function _buildTree($categories)
-    {
-
-        $map = array(
-            0 => array('subcategories' => array())
-        );
-
-        foreach ($categories as &$category) {
-            $category['subcategories'] = array();
-            $map[$category['id']] = &$category;
-        }
-
-        foreach ($categories as &$category) {
-            $map[$category['parent_id']]['subcategories'][] = &$category;
-        }
-
-        return $map[0]['subcategories'];
-
-    }
 
     public function behaviors()
     {
@@ -95,7 +78,20 @@ class CatalogueCategory extends BaseCatalogueCategory
         $behaviors['activerecord-relation'] = array(
             'class' => 'ext.yiiext.behaviors.activerecord-relation.EActiveRecordRelationBehavior',
         );
+        $behaviors['partial-inject'] = array(
+            'class' => 'ext.shared-core.form.FormPartialsInjectBehavior',
+        );
         return $behaviors;
     }
 
+    /**
+     * @return array
+     */
+    public function formPartialsInject()
+    {
+        return array(
+            "_infoForm",
+            "_properties"
+        );
+    }
 }

@@ -14,8 +14,7 @@ class CatalogueProperty extends BaseCatalogueProperty
     {
         $relations = parent::relations();
 
-        $relations['properties'] = Yii::app()->getModule("catalogue")->categoryModelClass;
-
+        $relations['categories'] = array(self::BELONGS_TO, Yii::app()->getModule("catalogue")->categoryModelClass, "category_id");
 
         return $relations;
     }

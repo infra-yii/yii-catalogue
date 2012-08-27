@@ -83,7 +83,6 @@ class ProductController extends Controller
 
         $this->render('create', array(
             'model' => $model,
-            'infoForm' => $this->getCatalogueModule()->infoFormView,
         ));
     }
 
@@ -113,7 +112,6 @@ class ProductController extends Controller
 
         $this->render('update', array(
             'model' => $model,
-            'infoForm' => $this->getCatalogueModule()->infoFormView,
         ));
     }
 
