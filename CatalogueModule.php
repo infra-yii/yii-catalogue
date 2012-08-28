@@ -9,6 +9,8 @@ class CatalogueModule extends CWebModule
     public $actionCategoryView = "/catalogue/product/view";
     public $categoryPropertiesModelClass = "CatalogueProperty";
 
+    public $categoryCompareView = "compare";
+
     //product config init
     public $viewProduct = 'view';
     public $actionProductView = "/catalogue/product/view";

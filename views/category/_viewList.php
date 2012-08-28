@@ -5,8 +5,6 @@
 
 <div class="view">
 
-    <?php // TODO: remove this field-name-dependency
-    if (isset($data->picHolder)) $this->widget("imagesHolder.widgets.heldImages.HeldImages", array("holder" => $data->picHolder, "size" => "tiny")) ?>
     <?php echo CHtml::link(CHtml::encode($data->title), array('list', 'id' => $data->id)); ?>
     <br/>
 

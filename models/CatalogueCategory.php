@@ -4,6 +4,7 @@ Yii::import('catalogue.models._base.BaseCatalogueCategory');
 
 /**
  * @property CatalogueProperty[] properties
+ * @property CatalogueProduct[] products
  */
 class CatalogueCategory extends BaseCatalogueCategory implements IFormPartialsInject
 {
@@ -24,7 +25,7 @@ class CatalogueCategory extends BaseCatalogueCategory implements IFormPartialsIn
         unset ($relations['catalogueProductInfos']);
         unset ($relations['tblCatalogueProperties']);
 
-        $relations['products'] = array(self::MANY_MANY, Yii::app()->getModule("catalogue")->categoryModelClass, '{{catalogue_category_to_product}}(product_id, category_id)');
+        $relations['products'] = array(self::MANY_MANY, Yii::app()->getModule("catalogue")->productModelClass, '{{catalogue_category_to_product}}(product_id, category_id)');
         $relations['info'] = array(self::HAS_ONE, Yii::app()->getModule("catalogue")->categoryInfoModelClass, 'category_id');
         $relations['properties'] = array(self::MANY_MANY, 'CatalogueProperty', '{{catalogue_property_to_category}}(category_id, property_id)');
 
