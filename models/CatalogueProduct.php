@@ -1,11 +1,13 @@
 <?php
 
-Yii::import('catalogue.models._base.BaseProduct');
+Yii::import('catalogue.models._base.BaseCatalogueProduct');
 
 /**
  * @property CatalogueProductInfo $info
+ * @property CataloguePropertyValue[] propertiesValues
+ * @property CatalogueCategory[] categories
  */
-class CatalogueProduct extends BaseProduct
+class CatalogueProduct extends BaseCatalogueProduct implements IFormPartialsInject
 {
 
     public static function model($className = null)
@@ -15,12 +17,14 @@ class CatalogueProduct extends BaseProduct
     }
 
     public function relations()
-    {   $relations = parent::relations();
-        unset ($relations['tblCategories']);
-        unset ($relations['productInfos']);
-
-        $relations['categories'] = array(self::MANY_MANY, Yii::app()->getModule("catalogue")->categoryModelClass, '{{category_to_product}}(product_id, category_id)');
+    {
+        $relations = parent::relations();
+        unset ($relations['tblCatalogueCategories']);
+        unset ($relations['catalogueProductInfos']);
+        unset ($relations['cataloguePropertiesValues']);
+        $relations['categories'] = array(self::MANY_MANY, Yii::app()->getModule("catalogue")->categoryModelClass, '{{catalogue_category_to_product}}(product_id, category_id)');
         $relations['info'] = array(self::HAS_ONE, Yii::app()->getModule("catalogue")->productInfoModelClass, 'product_id');
+        $relations['propertiesValues'] = array(self::HAS_MANY, 'CataloguePropertyValue', 'product_id');
 
         return $relations;
     }
@@ -33,8 +37,9 @@ class CatalogueProduct extends BaseProduct
     }
 
     public function beforeSave()
-    {   parent::beforeSave();
-        if(Yii::app()->getComponent("i18n2ascii")) {
+    {
+        parent::beforeSave();
+        if (Yii::app()->getComponent("i18n2ascii")) {
             Yii::app()->getComponent("i18n2ascii")->setModelUrlAlias($this, $this->title);
         }
         return true;
@@ -56,11 +61,27 @@ class CatalogueProduct extends BaseProduct
     }
 
     public function behaviors()
-    {   $behaviors = parent::behaviors();
+    {
+        $behaviors = parent::behaviors();
         $behaviors['activerecord-relation'] = array(
-                'class' => 'ext.yiiext.behaviors.activerecord-relation.EActiveRecordRelationBehavior',
-            );
+            'class' => 'ext.yiiext.behaviors.activerecord-relation.EActiveRecordRelationBehavior',
+        );
+        $behaviors['partial-inject'] = array(
+            'class' => 'ext.shared-core.form.FormPartialsInjectBehavior',
+        );
         return $behaviors;
+    }
+
+    /**
+     * @return array
+     */
+    public function formPartialsInject()
+    {
+        $partials = array("_infoForm");
+        if(!$this->isNewRecord) {
+            $partials[] = "_properties";
+        }
+        return $partials;
     }
 
     /**

@@ -2,17 +2,17 @@
 /* @var $this ProductController */
 /* @var $model CatalogueProduct */
 
-$this->breadcrumbs=array(
-	'Products'=>array('index'),
-	'Create',
+$this->breadcrumbs = array(
+    'Products' => array('index'),
+    'Create',
 );
 
-$this->menu=array(
-	array('label'=>'List Product', 'url'=>array('index')),
-	array('label'=>'Manage Product', 'url'=>array('admin')),
+$this->menu = array(
+    array('label' => 'List Product', 'url' => array('index')),
+    array('label' => 'Manage Product', 'url' => array('admin')),
 );
 ?>
 
 <h1>Create Product</h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model,'infoForm'=>$infoForm)); ?>
+<?php echo $this->renderPartial('_form', array('model' => $model)); ?>
