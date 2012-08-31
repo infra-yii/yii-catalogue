@@ -208,44 +208,6 @@ class CategoryController extends Controller
         ));
     }
 
-    public function actionSearch()
-    {
-        $search = new CatalogueSearch;
-
-        if(isset($_POST['CatalogueSearch'])) {
-            $search->attributes = $_POST['CatalogueSearch'];
-            $_GET['searchString'] = $search->string;
-        }
-
-        $criteria = new CDbCriteria(array(
-            'condition' => 'title LIKE :keyword',
-            'params' => array(
-                ':keyword' => '%'.$search->string.'%',
-            ),
-        ));
-
-        $categoryModel = $this->getCatalogueModule()->categoryModelClass;
-        $productModel =  $this->getCatalogueModule()->productModelClass;
-
-        $categoryCount = $categoryModel::model()->count($criteria);
-        $productCount = $productModel::model()->count($criteria);
-
-        $pages = new CPagination($categoryCount + $productCount);
-        $pages->pageSize = '10';
-        $pages->applyLimit($criteria);
-
-        $categories = $categoryModel::model()->findAll($criteria);
-        $products = $productModel::model()->findAll($criteria);
-
-        $this->render('found',array(
-            'categories' => $categories,
-            'products' => $products,
-            'pages' => $pages,
-            'search' => $search,
-        ));
-
-    }
-
     /**
      * Lists all category by parent id
      * @param integer $id the ID of the parent id

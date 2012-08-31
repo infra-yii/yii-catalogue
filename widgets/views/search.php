@@ -1,6 +1,6 @@
 <div id="search">
     <div id="search_div">
-        <?php $url = $this->getController()->createUrl('/catalogue/category/search'); ?>
+        <?php $url = $this->getController()->createUrl('/catalogue/search'); ?>
         <?php echo CHtml::beginForm($url); ?>
         <div class="row">
             <?php echo CHtml::activeTextField($form,'string') ?>
