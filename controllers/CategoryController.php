@@ -28,7 +28,7 @@ class CategoryController extends Controller
     {
         return array(
             array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('index', 'view', 'tree', 'list', 'compare'),
+                'actions' => array('index', 'view', 'tree', 'list', 'compare', 'search'),
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -206,6 +206,44 @@ class CategoryController extends Controller
         $this->render('admin', array(
             'model' => $model,
         ));
+    }
+
+    public function actionSearch()
+    {
+        $search = new CatalogueSearch;
+
+        if(isset($_POST['CatalogueSearch'])) {
+            $search->attributes = $_POST['CatalogueSearch'];
+            $_GET['searchString'] = $search->string;
+        }
+
+        $criteria = new CDbCriteria(array(
+            'condition' => 'title LIKE :keyword',
+            'params' => array(
+                ':keyword' => '%'.$search->string.'%',
+            ),
+        ));
+
+        $categoryModel = $this->getCatalogueModule()->categoryModelClass;
+        $productModel =  $this->getCatalogueModule()->productModelClass;
+
+        $categoryCount = $categoryModel::model()->count($criteria);
+        $productCount = $productModel::model()->count($criteria);
+
+        $pages = new CPagination($categoryCount + $productCount);
+        $pages->pageSize = '10';
+        $pages->applyLimit($criteria);
+
+        $categories = $categoryModel::model()->findAll($criteria);
+        $products = $productModel::model()->findAll($criteria);
+
+        $this->render('found',array(
+            'categories' => $categories,
+            'products' => $products,
+            'pages' => $pages,
+            'search' => $search,
+        ));
+
     }
 
     /**
