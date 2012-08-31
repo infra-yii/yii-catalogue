@@ -155,7 +155,9 @@ class CategoryController extends Controller
 
     public function actionCompare($id) {
         $model = $this->loadModel($id)->with("properties");
-        $this->render($this->getCatalogueModule()->categoryCompareView, array("model"=>$model));
+        $subCategories = Category::model()->subCategories($model);
+
+        $this->render($this->getCatalogueModule()->categoryCompareView, array("model"=>$model,'subCategories'=>$subCategories));
     }
 
     /**

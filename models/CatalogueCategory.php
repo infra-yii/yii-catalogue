@@ -24,10 +24,12 @@ class CatalogueCategory extends BaseCatalogueCategory implements IFormPartialsIn
         unset ($relations['tblCatalogueCategories']);
         unset ($relations['catalogueProductInfos']);
         unset ($relations['tblCatalogueProperties']);
+        unset ($relations['catalogueCategories']);
 
         $relations['products'] = array(self::MANY_MANY, Yii::app()->getModule("catalogue")->productModelClass, '{{catalogue_category_to_product}}(product_id, category_id)');
         $relations['info'] = array(self::HAS_ONE, Yii::app()->getModule("catalogue")->categoryInfoModelClass, 'category_id');
         $relations['properties'] = array(self::MANY_MANY, 'CatalogueProperty', '{{catalogue_property_to_category}}(category_id, property_id)');
+        $relations['subCategories'] = array(self::HAS_MANY, 'CatalogueCategory', 'parent_id');
 
         return $relations;
     }
@@ -83,6 +85,19 @@ class CatalogueCategory extends BaseCatalogueCategory implements IFormPartialsIn
             'class' => 'ext.shared-core.form.FormPartialsInjectBehavior',
         );
         return $behaviors;
+    }
+
+    public function subCategories($modelCategory){
+        $categories = array();
+
+        foreach($modelCategory->subCategories as $category){
+            $categories[] = $category;
+            foreach($this->subCategories($category) as $subSubCat){
+                $categories[] = $subSubCat;
+            }
+        }
+
+        return $categories;
     }
 
     /**
