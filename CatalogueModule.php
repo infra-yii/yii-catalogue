@@ -17,6 +17,8 @@ class CatalogueModule extends CWebModule
     public $productModelClass = "CatalogueProduct";
     public $productInfoModelClass = "CatalogueProductInfo";
 
+    public $searchWidgetView = "search";
+
     /**
      * @return array AdminGenModule integration
      */
@@ -27,6 +29,12 @@ class CatalogueModule extends CWebModule
             array('url' => array("/catalogue/product/admin"), 'label' => Yii::t("app", "Manage Product"), 'visible' => !Yii::app()->user->isGuest)
         ),
         'visible' => !Yii::app()->user->isGuest);
+        return $menuItems;
+    }
+
+    public function siteMapLinks()
+    {
+        $menuItems = array('label' => 'Catalogue', 'url' => '/catalogue/category');
         return $menuItems;
     }
 

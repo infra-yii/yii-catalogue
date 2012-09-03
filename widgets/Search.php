@@ -5,6 +5,7 @@ class Search extends CWidget
     public function run()
     {
         $form = new CatalogueSearch();
-        $this->render('search', array('form'=>$form));
+
+        $this->render(Yii::app()->getModule("catalogue")->searchWidgetView, array('form'=>$form));
     }
 }
