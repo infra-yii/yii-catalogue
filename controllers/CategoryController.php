@@ -28,7 +28,7 @@ class CategoryController extends Controller
     {
         return array(
             array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('index', 'view', 'tree', 'list'),
+                'actions' => array('index', 'view', 'tree', 'list', 'compare', 'search'),
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -153,6 +153,13 @@ class CategoryController extends Controller
         return $props;
     }
 
+    public function actionCompare($id) {
+        $model = $this->loadModel($id)->with("properties");
+        $subCategories = Category::model()->subCategories($model);
+
+        $this->render($this->getCatalogueModule()->categoryCompareView, array("model"=>$model,'subCategories'=>$subCategories));
+    }
+
     /**
      * Deletes a particular model.
      * If deletion is successful, the browser will be redirected to the 'admin' page.
@@ -209,6 +216,8 @@ class CategoryController extends Controller
      */
     public function actionList($id)
     {
+        $model = $this->loadModel($id);
+
         $categoryProvider = new CActiveDataProvider($this->getCatalogueModule()->categoryModelClass, array(
             'criteria' => array(
                 'condition' => 'parent_id=' . $id,
@@ -232,6 +241,7 @@ class CategoryController extends Controller
         ));
 
         $this->render('list', array(
+            'model' => $model,
             'categoryProvider' => $categoryProvider,
             'productProvider' => $productProvider,
         ));
