@@ -8,6 +8,7 @@ class CatalogueModule extends CWebModule
     public $categoryInfoModelClass = "CatalogueCategoryInfo";
     public $actionCategoryView = "/catalogue/product/view";
     public $categoryPropertiesModelClass = "CatalogueProperty";
+    public $viewListCategory = "list";
 
     public $categoryCompareView = "compare";
 
@@ -18,7 +19,7 @@ class CatalogueModule extends CWebModule
     public $productInfoModelClass = "CatalogueProductInfo";
 
     public $searchWidgetView = "search";
-
+    public $searchResultView = "found";
     /**
      * @return array AdminGenModule integration
      */

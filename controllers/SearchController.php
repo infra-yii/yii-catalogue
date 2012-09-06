@@ -66,7 +66,7 @@ class SearchController extends Controller
         $categories = $categoryModel::model()->findAll($criteria);
         $products = $productModel::model()->findAll($criteria);
 
-        $this->render('found',array(
+        $this->render(Yii::app()->getModule("catalogue")->searchResultView,array(
             'categories' => $categories,
             'products' => $products,
             'pages' => $pages,

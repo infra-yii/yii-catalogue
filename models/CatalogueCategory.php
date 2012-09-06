@@ -99,7 +99,11 @@ class CatalogueCategory extends BaseCatalogueCategory implements IFormPartialsIn
 
         return $categories;
     }
-
+    public function getBranch(){
+        $branch = $this->parent ? $this->parent->getBranch() : array();
+        $branch[] = $this;
+        return $branch;
+    }
     /**
      * @return array
      */

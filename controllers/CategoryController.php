@@ -6,7 +6,7 @@ class CategoryController extends Controller
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
-    public $layout = '//layouts/column2';
+    public $layout = '//layouts/main';
 
     /**
      * @return array action filters
@@ -240,7 +240,7 @@ class CategoryController extends Controller
             ),
         ));
 
-        $this->render('list', array(
+        $this->render($this->getCatalogueModule()->viewListCategory, array(
             'model' => $model,
             'categoryProvider' => $categoryProvider,
             'productProvider' => $productProvider,
