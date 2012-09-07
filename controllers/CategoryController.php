@@ -190,7 +190,7 @@ class CategoryController extends Controller
             ),
         ));
 
-        $this->render('index', array(
+        $this->render($this->getCatalogueModule()->categoryIndexView, array(
             'dataProvider' => $dataProvider,
         ));
     }
