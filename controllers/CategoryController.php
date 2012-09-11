@@ -220,7 +220,7 @@ class CategoryController extends Controller
 
         $categoryProvider = new CActiveDataProvider($this->getCatalogueModule()->categoryModelClass, array(
             'criteria' => array(
-                'condition' => 'parent_id=' . $model->id,
+                'condition' => 'parent_id=' . $id,
                 'order' => 'sorting DESC',
                 'with' => array('picHolder'),
             ),
@@ -233,7 +233,7 @@ class CategoryController extends Controller
             'criteria' => array(
                 //'with'=>array('categories'),
                 'join' => 'JOIN {{catalogue_category_to_product}} on t.id={{catalogue_category_to_product}}.product_id',
-                'condition' => 'category_id=' . $model->id,
+                'condition' => 'category_id=' . $id,
             ),
             'pagination' => array(
                 'pageSize' => 20,

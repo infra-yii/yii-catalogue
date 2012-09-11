@@ -37,7 +37,19 @@ class CatalogueModule extends CWebModule
 
     public function siteMapLinks()
     {
-        $menuItems = array('label' => 'Catalogue', 'url' => '/catalogue/category');
+        $categories = array();
+
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'parent_id is NULL';
+        $criteria->order = 'sorting DESC';
+
+        $arrayModels = Category::model()->findAll($criteria);
+
+        foreach($arrayModels as $category){
+            $categories[] = array('label' => $category->title, 'url' => $category->url());
+        }
+
+        $menuItems = array('label' => 'Catalogue', 'url' => array('/catalogue/category/index'), 'items'=>$categories);
         return $menuItems;
     }
 
