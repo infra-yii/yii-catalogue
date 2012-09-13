@@ -49,7 +49,7 @@ class CatalogueModule extends CWebModule
             $categories[] = array('label' => $category->title, 'url' => $category->url());
         }
 
-        $menuItems = array('label' => 'Catalogue', 'url' => array('/catalogue/category/index'), 'items'=>$categories);
+        $menuItems = array('label' => 'Каталог', 'url' => array('/catalogue/category/index'), 'items'=>$categories);
         return $menuItems;
     }
 
