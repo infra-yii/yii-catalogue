@@ -4,8 +4,6 @@
 ?>
 
 <div class="view">
-
-    <?php echo CHtml::link(CHtml::encode($data->title), array('list', 'id' => $data->id)); ?>
+    <?php echo CHtml::link(CHtml::encode($data->title), array('category/list', 'id' => $data->id)); ?>
     <br/>
-
 </div>

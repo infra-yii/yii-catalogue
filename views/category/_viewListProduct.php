@@ -1,13 +1,11 @@
 <?php
 /* @var $this CategoryController */
-/* @var $model Category */
+/* @var $model CatalogueCategory */
 ?>
 
 <div class="view">
 
-    <?php // TODO: remove this field-name-dependency
-    if (isset($data->picHolder)) $this->widget("imagesHolder.widgets.heldImages.HeldImages", array("holder" => $data->picHolder, "size" => "tiny")) ?>
-    <?php echo CHtml::link(CHtml::encode($data->title), array('product/view', 'id' => $data->id)); ?>
+    <?php echo CHtml::link(CHtml::encode($data->title), array(Yii::app()->getModule("catalogue")->actionProductView, 'id' => $data->id)); ?>
     <br/>
 
 </div>

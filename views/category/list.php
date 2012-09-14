@@ -13,7 +13,9 @@ $this->menu = array(
 );
 ?>
 
-<h1>Categories</h1>
+<h1>Categories for <?=$model->title?></h1>
+
+<?=CHtml::link("Compare", array("/catalogue/category/compare", "id"=>$model->id))?>
 
 <?php $this->widget('zii.widgets.CListView', array(
     'dataProvider' => $categoryProvider,

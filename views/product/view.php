@@ -18,6 +18,17 @@ $this->menu = array(
 
 <h1>View Product #<?php echo $model->id; ?></h1>
 
+<?if(count($model->propertiesValues)){?>
+<div>
+    <dl>
+    <?foreach($model->propertiesValues as $val){?>
+        <dt><?=$val->value?></dt>
+        <dd><?=$val->property->title?></dd>
+    <?}?>
+    </dl>
+</div>
+<?}?>
+
 <?php $this->widget('zii.widgets.CDetailView', array(
     'data' => $model,
     'attributes' => array(
