@@ -6,8 +6,11 @@ class CatalogueModule extends CWebModule
     public $categoryModelClass = "CatalogueCategory";
     public $viewCategory = 'view';
     public $categoryInfoModelClass = "CatalogueCategoryInfo";
-    public $actionCategoryView = "/catalogue/product/view";
+    public $actionCategoryView = "/catalogue/category/view";
+    public $actionCategoryList = "/catalogue/category/list";
     public $categoryPropertiesModelClass = "CatalogueProperty";
+    public $viewListCategory = "list";
+    public $categoryIndexView = 'index';
 
     public $categoryCompareView = "compare";
 
@@ -18,7 +21,7 @@ class CatalogueModule extends CWebModule
     public $productInfoModelClass = "CatalogueProductInfo";
 
     public $searchWidgetView = "search";
-
+    public $searchResultView = "found";
     /**
      * @return array AdminGenModule integration
      */
@@ -34,7 +37,19 @@ class CatalogueModule extends CWebModule
 
     public function siteMapLinks()
     {
-        $menuItems = array('label' => 'Catalogue', 'url' => '/catalogue/category');
+        $categories = array();
+
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'parent_id is NULL';
+        $criteria->order = 'sorting DESC';
+
+        $arrayModels = Category::model()->findAll($criteria);
+
+        foreach($arrayModels as $category){
+            $categories[] = array('label' => $category->title, 'url' => $category->url());
+        }
+
+        $menuItems = array('label' => 'Каталог', 'url' => array('/catalogue/category/index'), 'items'=>$categories);
         return $menuItems;
     }
 

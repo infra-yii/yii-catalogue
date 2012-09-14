@@ -63,7 +63,7 @@ class CatalogueCategory extends BaseCatalogueCategory implements IFormPartialsIn
      */
     public function url($normalize = true)
     {
-        $u = array(Yii::app()->getModule("catalogue")->actionView, "id" => $this->path ? $this->path : $this->id);
+        $u = array(Yii::app()->getModule("catalogue")->actionCategoryList, "id" => $this->path ? $this->path : $this->id);
 
         return $normalize ? CHtml::normalizeUrl($u) : $u;
     }
@@ -98,6 +98,16 @@ class CatalogueCategory extends BaseCatalogueCategory implements IFormPartialsIn
         }
 
         return $categories;
+    }
+    public function getBranch(){
+        $branch = $this->parent ? $this->parent->getBranch() : array();
+        $branch[] = $this;
+        return $branch;
+    }
+
+    public function findByPath($path)
+    {
+        return $this->findByAttributes(array("path" => $path));
     }
 
     /**

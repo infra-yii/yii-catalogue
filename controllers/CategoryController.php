@@ -6,7 +6,7 @@ class CategoryController extends Controller
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
-    public $layout = '//layouts/column2';
+    public $layout = '//layouts/main';
 
     /**
      * @return array action filters
@@ -190,7 +190,7 @@ class CategoryController extends Controller
             ),
         ));
 
-        $this->render('index', array(
+        $this->render($this->getCatalogueModule()->categoryIndexView, array(
             'dataProvider' => $dataProvider,
         ));
     }
@@ -220,7 +220,7 @@ class CategoryController extends Controller
 
         $categoryProvider = new CActiveDataProvider($this->getCatalogueModule()->categoryModelClass, array(
             'criteria' => array(
-                'condition' => 'parent_id=' . $id,
+                'condition' => 'parent_id=' . $model->id,
                 'order' => 'sorting DESC',
                 'with' => array('picHolder'),
             ),
@@ -233,14 +233,14 @@ class CategoryController extends Controller
             'criteria' => array(
                 //'with'=>array('categories'),
                 'join' => 'JOIN {{catalogue_category_to_product}} on t.id={{catalogue_category_to_product}}.product_id',
-                'condition' => 'category_id=' . $id,
+                'condition' => 'category_id=' . $model->id,
             ),
             'pagination' => array(
                 'pageSize' => 20,
             ),
         ));
 
-        $this->render('list', array(
+        $this->render($this->getCatalogueModule()->viewListCategory, array(
             'model' => $model,
             'categoryProvider' => $categoryProvider,
             'productProvider' => $productProvider,
