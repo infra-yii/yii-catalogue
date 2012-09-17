@@ -141,7 +141,7 @@ class CategoryController extends Controller
         $propertiesClass = $this->getCatalogueModule()->categoryPropertiesModelClass;
 
         $props = array();
-        foreach($newProperties as $title) {
+        foreach($newProperties as $title) if($title) {
             $p = CatalogueProperty::model()->findByAttributes(array("title"=>$title));
             if(!$p) {
                 $p = new $propertiesClass();
