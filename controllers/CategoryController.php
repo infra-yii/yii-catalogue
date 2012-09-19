@@ -51,7 +51,7 @@ class CategoryController extends Controller
      */
     public function actionView($id)
     {
-        $this->render('view', array(
+        $this->render($this->module->viewCategory, array(
             'model' => $this->loadModel($id),
         ));
     }
@@ -81,7 +81,7 @@ class CategoryController extends Controller
                 $model->properties = $this->getNewProps();
                 $model->save();
 
-                $this->redirect(array('view', 'id' => $model->id));
+                $this->redirect(array($this->module->actionCategoryView, 'id' => $model->id));
             }
         }
 
@@ -108,7 +108,7 @@ class CategoryController extends Controller
                 $this->setActualProps($model);
                 $model->save();
 
-                $this->redirect(array('view', 'id' => $model->id));
+                $this->redirect(array($this->module->actionCategoryView, 'id' => $model->id));
             }
         }
 
@@ -117,15 +117,16 @@ class CategoryController extends Controller
         ));
     }
 
-    private function setActualProps(CatalogueCategory &$model) {
+    private function setActualProps(CatalogueCategory &$model)
+    {
         $properties = isset($_POST['properties']) ? $_POST['properties'] : array();
         $props = $this->getNewProps();
 
-        foreach($properties as $id=>$v) {
-            if(isset($v["delete"])) continue;
-            foreach($model->properties as $p) {
-                if($p->id == $id) {
-                    if($p->title != $v["title"]) {
+        foreach ($properties as $id => $v) {
+            if (isset($v["delete"])) continue;
+            foreach ($model->properties as $p) {
+                if ($p->id == $id) {
+                    if ($p->title != $v["title"]) {
                         $p->title = $v["title"];
                         $p->save();
                     }
@@ -136,14 +137,15 @@ class CategoryController extends Controller
         $model->properties = $props;
     }
 
-    private function getNewProps() {
+    private function getNewProps()
+    {
         $newProperties = isset($_POST['newProperties']) ? $_POST['newProperties'] : array();
         $propertiesClass = $this->getCatalogueModule()->categoryPropertiesModelClass;
 
         $props = array();
-        foreach($newProperties as $title) if($title) {
-            $p = CatalogueProperty::model()->findByAttributes(array("title"=>$title));
-            if(!$p) {
+        foreach ($newProperties as $title) if ($title) {
+            $p = CatalogueProperty::model()->findByAttributes(array("title" => $title));
+            if (!$p) {
                 $p = new $propertiesClass();
                 $p->title = $title;
                 $p->save();
@@ -153,11 +155,12 @@ class CategoryController extends Controller
         return $props;
     }
 
-    public function actionCompare($id) {
+    public function actionCompare($id)
+    {
         $model = $this->loadModel($id)->with("properties");
         $subCategories = Category::model()->subCategories($model);
 
-        $this->render($this->getCatalogueModule()->categoryCompareView, array("model"=>$model,'subCategories'=>$subCategories));
+        $this->render($this->getCatalogueModule()->categoryCompareView, array("model" => $model, 'subCategories' => $subCategories));
     }
 
     /**
@@ -199,7 +202,8 @@ class CategoryController extends Controller
      * Manages all models.
      */
     public function actionAdmin()
-    {   $c = $this->getModelClass();
+    {
+        $c = $this->getModelClass();
         $model = new $c('search');
         $model->unsetAttributes(); // clear any default values
         if (isset($_GET[$this->getModelClass()]))
