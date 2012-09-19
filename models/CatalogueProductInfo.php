@@ -19,4 +19,11 @@ class CatalogueProductInfo extends BaseCatalogueProductInfo
 
         return $relations;
     }
+
+    public function rules()
+    {
+        $rules = parent::rules();
+        $rules[] = array("teh_info", "safe");
+        return $rules;
+    }
 }
