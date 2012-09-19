@@ -41,8 +41,8 @@ class SearchController extends Controller
     {
         $search = new CatalogueSearch;
 
-        if(isset($_POST['CatalogueSearch'])) {
-            $search->attributes = $_POST['CatalogueSearch'];
+        if(isset($_GET['CatalogueSearch'])) {
+            $search->attributes = $_GET['CatalogueSearch'];
             $_GET['searchString'] = $search->string;
         }
 
