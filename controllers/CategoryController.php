@@ -49,12 +49,12 @@ class CategoryController extends Controller
      * Displays a particular model.
      * @param integer $id the ID of the model to be displayed
      */
-    public function actionView($id)
+    /*public function actionView($id)
     {
         $this->render($this->module->viewCategory, array(
             'model' => $this->loadModel($id),
         ));
-    }
+    } */
 
     /**
      * Creates a new model.
@@ -218,7 +218,7 @@ class CategoryController extends Controller
      * Lists all category by parent id
      * @param integer $id the ID of the parent id
      */
-    public function actionList($id)
+    public function actionView($id)
     {
         $model = $this->loadModel($id);
 

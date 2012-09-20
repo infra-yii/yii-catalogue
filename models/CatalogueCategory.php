@@ -63,7 +63,7 @@ class CatalogueCategory extends BaseCatalogueCategory implements IFormPartialsIn
      */
     public function url($normalize = true)
     {
-        $u = array(Yii::app()->getModule("catalogue")->actionCategoryList, "id" => $this->path ? $this->path : $this->id);
+        $u = array(Yii::app()->getModule("catalogue")->actionCategoryView, "id" => $this->path ? $this->path : $this->id);
 
         return $normalize ? CHtml::normalizeUrl($u) : $u;
     }

@@ -26,6 +26,7 @@ class CatalogueProduct extends BaseCatalogueProduct implements IFormPartialsInje
         $relations['info'] = array(self::HAS_ONE, Yii::app()->getModule("catalogue")->productInfoModelClass, 'product_id');
         $relations['propertiesValues'] = array(self::HAS_MANY, 'CataloguePropertyValue', 'product_id');
         $relations['baseCategory'][1] = Yii::app()->getModule("catalogue")->categoryModelClass;
+
         return $relations;
     }
 
