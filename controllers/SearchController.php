@@ -53,18 +53,25 @@ class SearchController extends Controller
             ),
         ));
 
+        $criteriaProducts = new CDbCriteria(array(
+            'condition' => 'title LIKE :keyword OR article LIKE :keyword ',
+            'params' => array(
+                ':keyword' => '%'.$search->string.'%',
+            ),
+        ));
+
         $categoryModel = $this->getCatalogueModule()->categoryModelClass;
         $productModel =  $this->getCatalogueModule()->productModelClass;
 
         $categoryCount = $categoryModel::model()->count($criteria);
-        $productCount = $productModel::model()->count($criteria);
+        $productCount = $productModel::model()->count($criteriaProducts);
 
         $pages = new CPagination($categoryCount + $productCount);
         $pages->pageSize = '10';
         $pages->applyLimit($criteria);
 
         $categories = $categoryModel::model()->findAll($criteria);
-        $products = $productModel::model()->findAll($criteria);
+        $products = $productModel::model()->findAll($criteriaProducts);
 
         $this->render(Yii::app()->getModule("catalogue")->searchResultView,array(
             'categories' => $categories,
