@@ -48,7 +48,7 @@ abstract class BaseCatalogueProduct extends GxActiveRecord {
             array('base_category_id', 'numerical', 'integerOnly'=>true),
             array('title, path', 'length', 'max'=>200),
             array('path, base_category_id', 'default', 'setOnEmpty' => true, 'value' => null),
-            array('id, title, short_description, path, base_category_id', 'safe', 'on'=>'search'),
+            array('id, title, short_description, path, base_category_id, article', 'safe', 'on'=>'search'),
         );
     }
 
@@ -73,6 +73,7 @@ abstract class BaseCatalogueProduct extends GxActiveRecord {
             'title' => Yii::t('app', 'Title'),
             'short_description' => Yii::t('app', 'Short Description'),
             'path' => Yii::t('app', 'Path'),
+            'article' => Yii::t('app', 'Article'),
             'base_category_id' => null,
             'tblCatalogueCategories' => null,
             'baseCategory' => null,

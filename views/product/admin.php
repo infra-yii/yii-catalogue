@@ -48,6 +48,7 @@ $('.search-form form').submit(function(){
     'columns' => array(
         'id',
         'title',
+        'article',
         'short_description',
         array(
             'class' => 'CButtonColumn',
