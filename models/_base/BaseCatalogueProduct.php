@@ -90,7 +90,7 @@ abstract class BaseCatalogueProduct extends GxActiveRecord {
         $criteria->compare('short_description', $this->short_description, true);
         $criteria->compare('path', $this->path, true);
         $criteria->compare('base_category_id', $this->base_category_id);
-        $criteria->compare('article', $this->article);
+        $criteria->compare('article', $this->article, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
