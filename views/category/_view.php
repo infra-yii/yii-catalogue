@@ -5,7 +5,7 @@
 
 <div class="view">
 
-    <?php echo CHtml::link(CHtml::encode($data->title), array('list', 'id' => $data->id)); ?>
+    <?php echo CHtml::link(CHtml::encode($data->title), array('view', 'id' => $data->id)); ?>
     <br/>
 
 </div>
