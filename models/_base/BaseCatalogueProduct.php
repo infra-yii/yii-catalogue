@@ -74,7 +74,7 @@ abstract class BaseCatalogueProduct extends GxActiveRecord {
             'short_description' => Yii::t('app', 'Short Description'),
             'path' => Yii::t('app', 'Path'),
             'article' => Yii::t('app', 'Article'),
-            'base_category_id' => null,
+            'base_category_id' => Yii::t('app', 'CatalogueCategory'),
             'tblCatalogueCategories' => null,
             'baseCategory' => null,
             'catalogueProductInfos' => null,

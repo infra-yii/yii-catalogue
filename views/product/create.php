@@ -8,8 +8,8 @@ $this->breadcrumbs = array(
 );
 
 $this->menu = array(
-    array('label' => 'List Product', 'url' => array('index')),
-    array('label' => 'Manage Product', 'url' => array('admin')),
+    array('label' => 'Список продуктов', 'url' => array('index')),
+    array('label' => 'Управление продуктами', 'url' => array('admin')),
 );
 ?>
 

@@ -7,8 +7,8 @@ $this->breadcrumbs = array(
 );
 
 $this->menu = array(
-    array('label' => 'Create Category', 'url' => array('create')),
-    array('label' => 'Manage Category', 'url' => array('admin')),
+    array('label' => 'Создать категорию', 'url' => array('create')),
+    array('label' => 'Управление категориями', 'url' => array('admin')),
 );
 ?>
 

@@ -75,7 +75,7 @@ abstract class BaseCatalogueCategory extends GxActiveRecord {
     public function attributeLabels() {
         return array(
             'id' => Yii::t('app', 'ID'),
-            'parent_id' => null,
+            'parent_id' => Yii::t('app', 'CatalogueCategory'),
             'sorting' => Yii::t('app', 'Sorting'),
             'title' => Yii::t('app', 'Title'),
             'path' => Yii::t('app', 'Path'),

@@ -26,7 +26,7 @@ $inheritedProps = $model->collectProperties(true);
 
     <div class="row">
         <?foreach ($model->properties as $property) { ?>
-            <?php echo CHtml::activeLabelEx($model, 'Properties'); ?>
+            <?php echo CHtml::activeLabelEx($model, 'Свойства'); ?>
             <?php echo CHtml::textField('properties[' . $property->id . '][title]', $property->title) ?>
             <?php echo CHtml::checkBox('properties[' . $property->id . '][delete]', false, array("title" => "Delete")) ?>
         <? } ?>

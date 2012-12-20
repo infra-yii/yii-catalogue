@@ -9,10 +9,10 @@ $this->breadcrumbs = array(
 );
 
 $this->menu = array(
-    array('label' => 'List Category', 'url' => array('index')),
-    array('label' => 'Create Category', 'url' => array('create')),
-    array('label' => 'View Category', 'url' => array('view', 'id' => $model->id)),
-    array('label' => 'Manage Category', 'url' => array('admin')),
+    array('label' => 'Список категорий', 'url' => array('index')),
+    array('label' => 'Создать категорию', 'url' => array('create')),
+    array('label' => 'Просмотр категории', 'url' => array('view', 'id' => $model->id)),
+    array('label' => 'Управление категориями', 'url' => array('admin')),
 );
 ?>
 

@@ -8,8 +8,8 @@ $this->breadcrumbs = array(
 );
 
 $this->menu = array(
-    array('label' => 'List Category', 'url' => array('index')),
-    array('label' => 'Manage Category', 'url' => array('admin')),
+    array('label' => 'Список категорий', 'url' => array('index')),
+    array('label' => 'Управление категориями', 'url' => array('admin')),
 );
 ?>
 

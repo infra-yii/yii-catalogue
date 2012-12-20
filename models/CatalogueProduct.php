@@ -93,4 +93,11 @@ class CatalogueProduct extends BaseCatalogueProduct implements IFormPartialsInje
     {
         return $this->findByAttributes(array("path" => $path));
     }
+
+    public function attributeLabels() {
+        $attributeLabels = parent::attributeLabels();
+        $attributeLabels['categories'] = Yii::t('app', 'CatalogueCategories');
+
+        return $attributeLabels;
+    }
 }
