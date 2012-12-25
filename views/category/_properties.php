@@ -6,7 +6,7 @@ $('#properties').append('<span id=\"add\">+</span>');
 
 $('#add').click(function(){
 
-   $(this).prev().append('" . $form->labelEx($model, "properties") . CHtml::textField('newProperties[]') . "');
+   $(this).prev().append('" . $form->labelEx($model, "Свойства") . CHtml::textField('newProperties[]') . "');
 
 });
 
@@ -30,7 +30,7 @@ $inheritedProps = $model->collectProperties(true);
             <?php echo CHtml::textField('properties[' . $property->id . '][title]', $property->title) ?>
             <?php echo CHtml::checkBox('properties[' . $property->id . '][delete]', false, array("title" => "Delete")) ?>
         <? } ?>
-        <?=$form->labelEx($model, "properties")?>
+        <?=$form->labelEx($model, "Свойства")?>
         <?php echo CHtml::textField("newProperties[]")?>
     </div>
 </div>
