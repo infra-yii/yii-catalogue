@@ -44,7 +44,7 @@ abstract class BaseCatalogueProduct extends GxActiveRecord {
 
     public function rules() {
         return array(
-            array('title, short_description', 'required'),
+            array('title', 'required'),
             array('base_category_id', 'numerical', 'integerOnly'=>true),
             array('title, path', 'length', 'max'=>200),
             array('path, base_category_id', 'default', 'setOnEmpty' => true, 'value' => null),
