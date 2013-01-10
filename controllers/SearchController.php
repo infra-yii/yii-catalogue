@@ -60,18 +60,21 @@ class SearchController extends Controller
             ),
         ));
 
-        $categoryModel = $this->getCatalogueModule()->categoryModelClass;
-        $productModel =  $this->getCatalogueModule()->productModelClass;
+        $categoryModelClass = $this->getCatalogueModule()->categoryModelClass;
+        $productModelClass =  $this->getCatalogueModule()->productModelClass;
 
-        $categoryCount = $categoryModel::model()->count($criteria);
-        $productCount = $productModel::model()->count($criteriaProducts);
+        $categoryModel = new $categoryModelClass;
+        $productModel =  new $productModelClass;
+
+        $categoryCount = $categoryModel->count($criteria);
+        $productCount = $productModel->count($criteriaProducts);
 
         $pages = new CPagination($categoryCount + $productCount);
         $pages->pageSize = '10';
         $pages->applyLimit($criteria);
 
-        $categories = $categoryModel::model()->findAll($criteria);
-        $products = $productModel::model()->findAll($criteriaProducts);
+        $categories = $categoryModel->findAll($criteria);
+        $products = $productModel->findAll($criteriaProducts);
 
         $this->render(Yii::app()->getModule("catalogue")->searchResultView,array(
             'categories' => $categories,

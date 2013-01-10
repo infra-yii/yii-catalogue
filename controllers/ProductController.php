@@ -103,9 +103,10 @@ class ProductController extends Controller
         // $this->performAjaxValidation($model);
 
         if (isset($_POST[$this->getModelClass()])) {
+            $model->attributes = $_POST[$this->getModelClass()];
             $model->info->attributes = $_POST[$this->getModelClass()]['info'];
             $model->info->save();
-            $model->attributes = $_POST[$this->getModelClass()];
+
             if ($model->save()) {
                 $this->setPropertyValues($model);
                 $this->redirect(array($this->getCatalogueModule()->actionProductView, 'id' => $model->id));
