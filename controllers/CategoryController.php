@@ -238,6 +238,7 @@ class CategoryController extends Controller
                 //'with'=>array('categories'),
                 'join' => 'JOIN {{catalogue_category_to_product}} on t.id={{catalogue_category_to_product}}.product_id',
                 'condition' => 'category_id=' . $model->id,
+                'order' => 'sorting ASC',
             ),
             'pagination' => array(
                 'pageSize' => 20,
